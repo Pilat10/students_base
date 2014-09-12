@@ -1,0 +1,8 @@
+<h1>hello</h1>
+<ul>
+    {% for group in object_list %}
+    <li>{{ group.name }}</li>
+    <li>{{ group.headman }}</li>
+    <li>{{ group.student_set.count }}</li>
+    {% endfor %}
+</ul>
