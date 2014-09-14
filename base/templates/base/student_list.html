@@ -1,0 +1,27 @@
+{% extends "index.html" %}
+{% block title %} {{ title }} {% endblock %}
+{% block content %}
+    {% if student_list %}
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="3">Student list</th>
+                </tr>
+                <tr>
+                    <th>Student fio</th>
+                    <th>Student birthday</th>
+                    <th>Student number cart</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in student_list %}
+                    <tr>
+                        <td>{{ student.fio }}</td>
+                        <td>{{ student.birthday }}</td>
+                        <td>{{ student.number_student_cart }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
