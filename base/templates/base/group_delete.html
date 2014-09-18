@@ -3,8 +3,8 @@
 {% block content %}
     <div class="forms">
         <form action="" method="post">{% csrf_token %}
-            {{ form.as_ul }}
-            <input type="submit" value="Submit" />
+            <p>Are you sure you want to delete {{ object }} ?</p>
+            <input type="submit" value="Delete" />
         </form>
     </div>
     <a href="{% url 'group_list' %}">Back</a>

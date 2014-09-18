@@ -2,12 +2,14 @@
 <html>
 <head>
     {% load staticfiles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'base/style.css' %}" >
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" >
     <title>{% block title %}Title default{% endblock %}</title>
 </head>
 <body>
-    <div id="content">
-        {% block content %}{% endblock %}
+    <div id="base">
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
     </div>
 </body>
 </html>
