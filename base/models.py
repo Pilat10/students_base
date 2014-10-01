@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_save, post_delete
+from base.signals import obj_save, obj_delete
 
 # Create your models here.
 
@@ -27,3 +29,9 @@ class Student(models.Model):
 
     def __unicode__(self):
         return self.fio
+
+
+post_save.connect(obj_save, sender=Group)
+post_save.connect(obj_save, sender=Student)
+post_delete.connect(obj_delete, sender=Group)
+post_delete.connect(obj_delete, sender=Student)
