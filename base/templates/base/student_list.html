@@ -24,7 +24,7 @@
                             {% load staticfiles %}
                             <a href="{% url 'student_edit' student.pk %}">
                                 <img src="{% static 'imeg/edit.png' %}"></a>
-                            <a href="">
+                            <a href="{% url 'student_delete' student.pk %}">
                                 <img src="{% static 'imeg/delete.png' %}">
                             </a>
                         </td>
@@ -33,6 +33,6 @@
             </tbody>
         </table>
     {% endif %}
-    <a href="{% url 'student_add'  %}">Add new student</a>
+    <a href="{% url 'student_add'  %}?group_id={{ group_id }}">Add new student</a>
     <a href="{% url 'group_list' %}">Back</a>
 {% endblock %}

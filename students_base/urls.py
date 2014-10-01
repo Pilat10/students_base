@@ -25,5 +25,16 @@ urlpatterns = patterns('',
     url(r'^student/add/$', StudentAdd.as_view(), name='student_add'),
     url(r'^student/edit/(?P<student_id>\d+)/$', StudentEdit.as_view(),
         name='student_edit'),
+    url(r'^student/delete/(?P<student_id>\d+)/$', StudentDelete.as_view(),
+        name='student_delete'),
+
+    url(r'^login/$', 'django.contrib.auth.views.login',
+        {'template_name': 'registration/login.html',
+         'redirect_field_name': 'groups/'}, name='login'),
+    url(r'^login_email/$', 'django.contrib.auth.views.login',
+        {'template_name': 'registration/login_email.html',
+         'redirect_field_name': 'groups/'}, name='login_email'),
+    url(r'^logout/$', 'django.contrib.auth.views.logout',
+        {'next_page': 'group_list'}, name='logout')
 
 )

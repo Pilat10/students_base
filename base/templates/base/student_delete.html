@@ -3,9 +3,8 @@
 {% block content %}
     <div class="forms">
         <form action="" method="post">{% csrf_token %}
-            {{ form.as_p }}
-            {{ get_id_sacces }}
-            <input type="submit" value="Update" />
+            <p>Are you sure you want to delete {{ object }} ?</p>
+            <input type="submit" value="Delete" />
         </form>
     </div>
     <a href="{% url 'student_list' group_id %}">Back</a>
