@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 from base.views import *
 from django.contrib import admin
+from api import urls as api_urls
 admin.autodiscover()
 
 test = True
@@ -13,6 +14,7 @@ urlpatterns = patterns('',
 
 
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^api/v1/', include(api_urls, namespace='api')),
     url(r'^groups/$', GroupList.as_view(), name='group_list'),
     url(r'^groups/(?P<group_id>\d+)/$', StudentList.as_view(),
         name='student_list'),
@@ -35,6 +37,8 @@ urlpatterns = patterns('',
         {'template_name': 'registration/login_email.html',
          'redirect_field_name': 'groups/'}, name='login_email'),
     url(r'^logout/$', 'django.contrib.auth.views.logout',
-        {'next_page': 'group_list'}, name='logout')
+        {'next_page': 'group_list'}, name='logout'),
+    url(r'^api-auth/', include('rest_framework.urls',
+                               namespace='rest_framework'))
 
 )
