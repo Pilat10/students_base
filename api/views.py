@@ -1,9 +1,9 @@
-from django.shortcuts import render
 from api.serializers import StudentSerializer, GroupSerializer
 from rest_framework import generics
 from base.models import Group, Student
 from api.mixins import ResponseDataWrapperMixin
 from rest_framework import permissions
+
 
 class GroupList(ResponseDataWrapperMixin, generics.ListCreateAPIView):
     """

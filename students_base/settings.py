@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
 )
 
 PROJECT_APPS = (
@@ -97,15 +98,3 @@ STATICFILES_DIRS = (
 )
 
 STATIC_URL = '/static/'
-
-
-SUCCESS_STATUS_CODES = (
-    200,
-    201,
-)
-
-FAIL_STATUS_CODES = (
-    480,
-    400,
-    405
-)
