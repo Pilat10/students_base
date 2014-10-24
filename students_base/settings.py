@@ -39,6 +39,7 @@ INSTALLED_APPS = (
 )
 
 PROJECT_APPS = (
+    'rest_framework',
     'base',
 )
 
@@ -96,3 +97,15 @@ STATICFILES_DIRS = (
 )
 
 STATIC_URL = '/static/'
+
+
+SUCCESS_STATUS_CODES = (
+    200,
+    201,
+)
+
+FAIL_STATUS_CODES = (
+    480,
+    400,
+    405
+)
