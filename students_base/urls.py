@@ -2,11 +2,15 @@ from django.conf.urls import patterns, include, url
 from base.views import *
 from django.contrib import admin
 from api import urls as api_urls
+from angular import urls as ang_urls
 admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
+
     url(r'^api/v1/', include(api_urls, namespace='api')),
+    url(r'^ang/', include(ang_urls, namespace='ang')),
+
     url(r'^groups/$', GroupList.as_view(), name='group_list'),
     url(r'^groups/(?P<group_id>\d+)/$', StudentList.as_view(),
         name='student_list'),

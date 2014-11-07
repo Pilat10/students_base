@@ -36,12 +36,12 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
 )
 
 PROJECT_APPS = (
     'rest_framework',
     'base',
+    'angular'
 )
 
 INSTALLED_APPS += PROJECT_APPS
