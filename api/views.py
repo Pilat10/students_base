@@ -16,7 +16,7 @@ class GroupList(ResponseDataWrapperMixin, generics.ListCreateAPIView):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    #permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
 
 class GroupDetail(ResponseDataWrapperMixin,
@@ -26,7 +26,7 @@ class GroupDetail(ResponseDataWrapperMixin,
     """
     model = Group
     serializer_class = GroupSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    #permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
 
 class StudentList(ResponseDataWrapperMixin, generics.ListCreateAPIView):
@@ -35,7 +35,7 @@ class StudentList(ResponseDataWrapperMixin, generics.ListCreateAPIView):
     """
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    #permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
     def get_queryset(self):
         group_id = self.request.QUERY_PARAMS.get('group_id', None)
@@ -52,4 +52,4 @@ class StudentDetail(ResponseDataWrapperMixin,
     """
     model = Student
     serializer_class = StudentSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    #permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
