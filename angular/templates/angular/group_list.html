@@ -1,17 +1,42 @@
 {% extends "index_ang.html" %}
 {% block title %} {{ title }} {% endblock %}
+
 {% block content %}
-    <p>Hello world</p>
-    {% verbatim %}
-    <div ng-controller="PhoneListCtrl">
-        {{ mynamb }}
-        <ul>
-            <li ng-repeat="phone in phones">
-            {{phone.name}}
-            <p>{{phone.snippet}}</p>
-            </li>
-        </ul>
+    <div  ng-controller="GroupList">
+    <p>ang group list</p>
+        <div ng-if="show_group">
+            <p> {$ statics $}</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="4">Group list</th>
+                    </tr>
+                    <tr>
+                        <th>Group name</th>
+                        <th>Group student count</th>
+                        <th>Group headman</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="group in groups.data">
+                        <td>
+                            <a href="">{$ group.name $}</a>
+                        </td>
+                        <td>{$ group.count $}</td>
+                        <td>{$ group.headman_name $}</td>
+                        <td>
+                            {% load staticfiles %}
+                            <a href="">
+                                <img src="{% static 'imeg/edit.png' %}"></a>
+                            <a href="">
+                                <img src="{% static 'imeg/delete.png' %}">
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    {% endverbatim %}
 {% endblock %}

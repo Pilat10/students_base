@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from django.views.generic import TemplateView
 from base.views import *
 from django.contrib import admin
 from api import urls as api_urls
@@ -8,7 +9,13 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
+
+
     url(r'^api/v1/', include(api_urls, namespace='api')),
+
+    url(r'^.*$', TemplateView.as_view(
+        template_name='index_angular.html')),
+
     url(r'^ang/', include(ang_urls, namespace='ang')),
 
     url(r'^groups/$', GroupList.as_view(), name='group_list'),

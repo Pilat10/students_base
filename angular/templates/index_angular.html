@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="AngularApp">
+<head>
+                        <base href="PATH_HERE" />
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" >
+    <title>{% block title %}Title default{% endblock %}</title>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.1/angular.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.1/angular-route.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/controller.js' %}"></script>
+    <script>
+        {% load staticfiles %}
+        vars = {
+            static: '{% static 'angular/' %}'
+        }
+    </script>
+</head>
+<body>
+    <div id="base">
+        <div class="content">
+
+
+<div ng-controller="MainController">
+  Choose:
+  <a href="Book/Moby">Moby</a> |
+  <a href="Book/Moby/ch/1">Moby: Ch1</a> |
+  <a href="Book/Gatsby">Gatsby</a> |
+  <a href="Book/Gatsby/ch/4?key=value">Gatsby: Ch4</a> |
+  <a href="Book/Scarlet">Scarlet Letter</a><br/>
+
+  <div ng-view></div>
+
+  <hr />
+
+  <pre>$location.path() = {$ $location.path() $}</pre>
+  <pre>$route.current.templateUrl = {$ $route.current.templateUrl $}</pre>
+  <pre>$route.current.params = {$ $route.current.params $}</pre>
+  <pre>$route.current.scope.name = {$ $route.current.scope.name $}</pre>
+  <pre>$routeParams = {$ $routeParams $}</pre>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div  ng-controller="GroupList">
+                <p> {$ statics $}</p>
+                <p> {$ sss $}</p>
+                <!--<div ng-view></div>-->
+                <div ng-if="show_group">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="4">Group list</th>
+                            </tr>
+                            <tr>
+                                <th>Group name</th>
+                                <th>Group student count</th>
+                                <th>Group headman</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="group in groups.data">
+                                <td>
+                                    <a href="">{$ group.name $}</a>
+                                </td>
+                                <td>{$ group.count $}</td>
+                                <td>{$ group.headman_name $}</td>
+                                <td>
+                                    {% load staticfiles %}
+                                    <a href="">
+                                        <img src="{% static 'imeg/edit.png' %}"></a>
+                                    <a href="">
+                                        <img src="{% static 'imeg/delete.png' %}">
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
