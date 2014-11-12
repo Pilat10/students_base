@@ -1,0 +1,13 @@
+<p>student_add</p>
+<p>{{ student | json }}</p>
+<p>{{ student.birthday | date: "yyyy-MM-dd" }}</p>
+<form ng-submit="submit()">
+    <p>Name: <input type="text" ng-model="student.fio" /></p>
+    <p>Birthday: <input type="date" placeholder="yyyy-MM-dd" ng-model="student.birthday" /></p>
+    <p>Number student cart: <input type="number" ng-model="student.number_student_cart" /></p>
+    <p>Group: <select ng-model="student.group" ng-options="group.name for group in groups">
+        <option value="">--------</option>
+    </select></p>
+    <input type="submit" id="submit" value="Add student" />
+</form>
+<a href="groups/{{ group_id }}">Back</a>

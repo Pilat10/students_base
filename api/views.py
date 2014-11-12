@@ -29,6 +29,7 @@ class GroupDetail(ResponseDataWrapperMixin,
     #permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
 
+
 class StudentList(ResponseDataWrapperMixin, generics.ListCreateAPIView):
     """
 

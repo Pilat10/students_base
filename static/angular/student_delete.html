@@ -1,0 +1,7 @@
+<p>student_delete</p>
+
+<form ng-submit="submit()">
+    <p>Are you sure you want to delete: {{ student.fio }}?</p>
+    <input type="submit" id="submit" value="Delete" />
+</form>
+<a href="groups/{{ student.group }}">Back</a>

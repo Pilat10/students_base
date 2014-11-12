@@ -1,8 +1,9 @@
 <p>group_edit</p>
 <form ng-submit="submit()">
     <p>Name: <input type="text" ng-model="group.name" /></p>
-    <p>Headman: <select ng-model="MyStud" ng-options="student.fio for student in students">
+    <p>Headman: <select ng-model="group.headman" ng-options="student.fio for student in students">
         <option value="">--------</option>
     </select></p>
-    <input type="submit" id="submit" value="Submit" />
+    <input type="submit" id="submit" value="Edit group" />
 </form>
+<a href="groups/">Back</a>

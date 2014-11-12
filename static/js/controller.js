@@ -12,36 +12,7 @@ StudentBaseApp.controller('MainController', function($scope, $route, $routeParam
      $scope.$location = $location;
      $scope.$routeParams = $routeParams;
 });
-
- StudentBaseApp.controller('BookController', function($scope, $routeParams) {
-     $scope.name = "BookController";
-     $scope.params = $routeParams;
- });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 StudentBaseApp.config(['$httpProvider', configHttpProvider]);
-
-StudentBaseApp.config(function($interpolateProvider, $locationProvider) {
-    //$interpolateProvider.startSymbol('{$');
-    //$interpolateProvider.endSymbol('$}');
-});
 
 StudentBaseApp.config(function($routeProvider, $locationProvider) {
     $routeProvider
@@ -65,13 +36,22 @@ StudentBaseApp.config(function($routeProvider, $locationProvider) {
         templateUrl: vars.static_teampleate + 'group_delete.html',
         controller: 'GroupDelete'
     })
+    .when('/student_add', {
+        templateUrl: vars.static_teampleate + 'student_add.html',
+        controller: 'StudentAdd'
+    })
+    .when('/student/edit/:studentId', {
+        templateUrl: vars.static_teampleate + 'student_edit.html',
+        controller: 'StudentEdit'
+    })
+    .when('/student/delete/:studentId', {
+        templateUrl: vars.static_teampleate + 'student_delete.html',
+        controller: 'StudentDelete'
+    })
     .otherwise({
-        //templateUrl: '/static/angular/book.html',
-        //controller: 'BookController'
-        //redirectTo:'/groups'
+        redirectTo:'/groups'
     });
 
-    // configure html5 to get links working on jsfiddle
     $locationProvider.html5Mode(true);
 });
 
@@ -83,7 +63,6 @@ StudentBaseApp.controller('GroupList', function($scope, $http) {
             $scope.show_group=true;
         }
         $scope.static = vars.static;
-        $scope.sss = vars.static + 'group_list.html';
     })
 });
 
@@ -96,6 +75,7 @@ StudentBaseApp.controller('StudentList', function($scope, $http, $routeParams) {
                 $scope.show_students=true;
             }
             $scope.static = vars.static;
+            $scope.group_id = $routeParams.groupId
     })
 });
 
@@ -119,7 +99,7 @@ StudentBaseApp.controller('GroupEdit', function($scope, $http, $location, $route
             $scope.students = data.data;
             for(var i = 0; i<$scope.students.length; i++){
                 if($scope.students[i].id == $scope.group.headman){
-                    $scope.MyStud = $scope.students[i];
+                    $scope.group.headman = $scope.students[i];
                 }
             }
         })
@@ -127,8 +107,8 @@ StudentBaseApp.controller('GroupEdit', function($scope, $http, $location, $route
 
     $scope.submit = function() {
         if ($scope.group.name) {
-            if($scope.MyStud != null){
-                $scope.group.headman = $scope.MyStud.id;
+            if($scope.group.headman != null){
+                $scope.group.headman = $scope.group.headman.id;
             } else {
                 $scope.group.headman = '';
             }
@@ -147,9 +127,71 @@ StudentBaseApp.controller('GroupDelete', function($scope, $http, $location, $rou
     });
 
     $scope.submit = function() {
-        $http.delete('/api/v1/group/'+$routeParams.groupId, $scope.group).success(function(data) {
+        $http.delete('/api/v1/group/'+$routeParams.groupId+'/', $scope.group).success(function(data) {
                 $location.path('/groups').replace();
             });
+
+    };
+});
+
+StudentBaseApp.controller('StudentAdd', function($scope, $http, $location, $routeParams) {
+    $http.get('/api/v1/group/.json').success(function(data){
+        $scope.groups = data.data;
+    })
+    $scope.group_id = $routeParams.group_id;
+    $scope.submit = function() {
+        var date = $scope.student.birthday;
+        var student = {
+            fio: $scope.student.fio,
+            birthday: date.getFullYear().toString()+'-'+(date.getMonth()+1).toString()+'-'+date.getDate().toString(),
+            number_student_cart: $scope.student.number_student_cart,
+            group: $scope.student.group.id
+        }
+        $http.post('/api/v1/students/', student).success(function(data){
+            $location.path('/groups/'+$scope.student.group.id).replace();
+        })
+    };
+});
+
+StudentBaseApp.controller('StudentEdit', function($scope, $http, $location, $routeParams) {
+    $http.get('/api/v1/students/'+ $routeParams.studentId +'/.json').success(function(data) {
+        $scope.student = data.data;
+        $scope.student.birthday = new Date($scope.student.birthday);
+        $http.get('/api/v1/group/.json').success(function(data) {
+            $scope.groups = data.data;
+            for(var i = 0; i<$scope.groups.length; i++){
+                if($scope.groups[i].id == $scope.student.group){
+                    $scope.student.group = $scope.groups[i];
+                }
+            }
+        })
+    });
+
+    $scope.fffd='dfds';
+    $scope.submit = function() {
+        var date = $scope.student.birthday;
+        var student = {
+            fio: $scope.student.fio,
+            birthday: date.getFullYear().toString()+'-'+(date.getMonth()+1).toString()+'-'+date.getDate().toString(),
+            number_student_cart: $scope.student.number_student_cart,
+            group: $scope.student.group.id
+        }
+        $http.put('/api/v1/students/'+$routeParams.studentId, student)
+        .success(function(data) {
+            $location.path('/groups/'+$scope.student.group.id).replace();
+        });
+    };
+});
+
+StudentBaseApp.controller('StudentDelete', function($scope, $http, $location, $routeParams) {
+    $http.get('/api/v1/students/'+ $routeParams.studentId +'/.json').success(function(data) {
+        $scope.student = data.data;
+    });
+
+    $scope.submit = function() {
+        $http.delete('/api/v1/students/'+$routeParams.studentId+'/', $scope.student).success(function(data) {
+            $location.path('/groups/'+$scope.student.group).replace();
+        });
 
     };
 });

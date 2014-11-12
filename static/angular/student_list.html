@@ -19,10 +19,10 @@
                 <td>{{ student.birthday }}</td>
                 <td>{{ student.number_student_cart }}</td>
                 <td>
-                    <a href="">
+                    <a href="student/edit/{{ student.id }}">
                         <img src="{{ static + 'imeg/edit.png'}} ">
                     </a>
-                    <a href="">
+                    <a href="student/delete/{{ student.id }}">
                         <img src="{{ static + 'imeg/delete.png' }}">
                     </a>
                 </td>
@@ -30,3 +30,5 @@
         </tbody>
     </table>
 </div>
+<a href="student_add?group_id={{ group_id }}">Add new student</a>
+<a href="groups/">Back</a>
