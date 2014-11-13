@@ -167,7 +167,6 @@ StudentBaseApp.controller('StudentEdit', function($scope, $http, $location, $rou
         })
     });
 
-    $scope.fffd='dfds';
     $scope.submit = function() {
         var date = $scope.student.birthday;
         var student = {
