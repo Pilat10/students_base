@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="AngularApp">
+<head>
+    <base href="/ang/" />
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" >
+    <title></title>
+
+</head>
+<body>
+    <div id="base">
+        <div class="content">
+
+                <div ng-controller="MainController">
+
+                  <div ng-view></div>
+                  <hr />
+                    {% verbatim %}
+                  <pre>$location.path() = {{ $location.path() }}</pre>
+                  <pre>$route.current.templateUrl = {{ $route.current.templateUrl }}</pre>
+                  <pre>$route.current.params = {{ $route.current.params }}</pre>
+                  <pre>$route.current.scope.name = {{ $route.current.scope.name }}</pre>
+                  <pre>$routeParams = {{ $routeParams }}</pre>
+                    {% endverbatim %}
+                </div>
+
+        </div>
+    </div>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.1/angular.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.1/angular-route.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/controller.js' %}"></script>
+    <script>
+        {% load staticfiles %}
+        vars = {
+            static: '{% static '' %}',
+            static_teampleate: '{% static 'angular/' %}'
+        }
+    </script>
+</body>
+</html>

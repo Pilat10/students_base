@@ -1,0 +1,34 @@
+<p>student list</p>
+<p>{{ students.status }}</p>
+<div ng-if="show_students">
+    <table>
+        <thead>
+            <tr>
+                <th colspan="4">Student list</th>
+            </tr>
+            <tr>
+                <th>Student fio</th>
+                <th>Student birthday</th>
+                <th>Student number cart</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="student in students.data">
+                <td>{{ student.fio }}</td>
+                <td>{{ student.birthday }}</td>
+                <td>{{ student.number_student_cart }}</td>
+                <td>
+                    <a href="student/edit/{{ student.id }}">
+                        <img src="{{ static + 'imeg/edit.png'}} ">
+                    </a>
+                    <a href="student/delete/{{ student.id }}">
+                        <img src="{{ static + 'imeg/delete.png' }}">
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<a href="student_add?group_id={{ group_id }}">Add new student</a>
+<a href="groups/">Back</a>
