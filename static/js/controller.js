@@ -1,5 +1,5 @@
 function PhoneListCtrl($scope) {
-    $scope.mynamb = "dddddddd"
+    $scope.mynamb = "dddddddd";
     $scope.phones = [
     {"name": "Nexus S",
     "snippet": "Fast just got faster with Nexus S."},
