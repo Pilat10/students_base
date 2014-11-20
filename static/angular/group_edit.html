@@ -1,9 +1,9 @@
 <p>group_edit</p>
-<form ng-submit="submit()">
-    <p>Name: <input type="text" ng-model="group.name" /></p>
-    <p>Headman: <select ng-model="group.headman" ng-options="student.fio for student in students">
+<form name="groupFormEdit" ng-submit="submit()">
+    <p>Name: <input type="text" ng-model="group.name" required/></p>
+    <p>Headman: <select ng-model="group.headman" ng-options="student.fio for student in students" required>
         <option value="">--------</option>
     </select></p>
-    <input type="submit" id="submit" value="Edit group" />
+    <input type="submit" id="submit" ng-disabled="groupFormEdit.$invalid" value="Edit group" />
 </form>
 <a href="groups/">Back</a>

@@ -1,11 +1,11 @@
 <p>student_edit</p>
-<form ng-submit="submit()">
-    <p>Name: <input type="text" ng-model="student.fio" /></p>
-    <p>Birthday: <input type="date" placeholder="yyyy-MM-dd" ng-model="student.birthday" /></p>
-    <p>Number student cart: <input type="number" ng-model="student.number_student_cart" /></p>
-    <p>Group: <select ng-model="student.group" ng-options="group.name for group in groups">
+<form name="studentForm" ng-submit="submit()">
+    <p>Name: <input type="text" ng-model="student.fio" required/></p>
+    <p>Birthday: <input type="date" placeholder="yyyy-MM-dd" ng-model="student.birthday" required/></p>
+    <p>Number student cart: <input type="number" ng-model="student.number_student_cart" required/></p>
+    <p>Group: <select ng-model="student.group" ng-options="group.name for group in groups" required>
         <option value="">--------</option>
     </select></p>
-    <input type="submit" id="submit" value="Edit student" />
+    <input type="submit" id="submit" ng-disabled="studentForm.$invalid" value="Edit student" />
 </form>
 <a href="groups/{{ student.group.id }}">Back</a>
