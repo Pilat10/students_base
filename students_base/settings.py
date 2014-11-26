@@ -41,7 +41,7 @@ INSTALLED_APPS = (
 PROJECT_APPS = (
     'rest_framework',
     'base',
-    'angular'
+    'rest_framework_swagger',
 )
 
 INSTALLED_APPS += PROJECT_APPS
@@ -53,7 +53,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'base.middleware.MyMiddleware',
+    #'base.middleware.MyMiddleware',
 )
 
 ROOT_URLCONF = 'students_base.urls'
@@ -84,11 +84,43 @@ USE_L10N = True
 
 USE_TZ = True
 
-LOGIN_REDIRECT_URL = '/ang/groups'
+LOGIN_REDIRECT_URL = '/groups'
 
 AUTHENTICATION_BACKENDS = (
     'base.auth.MyAuth',
     'django.contrib.auth.backends.ModelBackend',
+)
+
+SWAGGER_SETTINGS = {
+    "exclude_namespaces": [],
+    "api_version": '1.0.0',
+    "api_path": "/",
+    "api_key": '',
+    "enabled_methods": ['get', 'post', 'put', 'patch', 'delete'],
+    "is_authenticated": True,
+    "is_superuser": False,
+    "permission_denied_handler": None,
+    "info": {
+        'contact': 'apiteam@wordnik.com',
+        'description': 'This is a sample server Petstore server. '
+                       'You can find out more about Swagger at '
+                       '<a href="http://swagger.wordnik.com">'
+                       'http://swagger.wordnik.com</a> '
+                       'or on irc.freenode.net, #swagger. '
+                       'For this sample, you can use the api key '
+                       '"special-key" to test '
+                       'the authorization filters',
+        'license': 'Apache 2.0',
+        'licenseUrl': 'http://www.apache.org/licenses/LICENSE-2.0.html',
+        'termsOfServiceUrl': 'http://helloreverb.com/terms/',
+        'title': 'Swagger Sample App',
+    },
+}
+
+import os.path
+
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates'),
 )
 
 # Static files (CSS, JavaScript, Images)
