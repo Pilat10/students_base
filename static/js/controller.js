@@ -56,7 +56,7 @@ StudentBaseApp.config(function($routeProvider, $locationProvider) {
 });
 
 StudentBaseApp.controller('GroupList', function($scope, $http) {
-    $http.get('/api/v1/group/.json').success(function(data) {
+    $http.get('/api/v1/group/').success(function(data) {
         $scope.groups = data;
         $scope.show_group=false;
         if (data.status == "success"){
@@ -67,7 +67,7 @@ StudentBaseApp.controller('GroupList', function($scope, $http) {
 });
 
 StudentBaseApp.controller('StudentList', function($scope, $http, $routeParams) {
-    $http.get('/api/v1/students/.json?group_id='+$routeParams.groupId)
+    $http.get('/api/v1/students/?group_id='+$routeParams.groupId)
         .success(function(data) {
             $scope.students = data;
             $scope.show_students=false;
@@ -92,9 +92,9 @@ StudentBaseApp.controller('GroupAdd', function($scope, $http, $location) {
 });
 
 StudentBaseApp.controller('GroupEdit', function($scope, $http, $location, $routeParams) {
-    $http.get('/api/v1/group/'+ $routeParams.groupId +'/.json').success(function(data) {
+    $http.get('/api/v1/group/'+ $routeParams.groupId +'/').success(function(data) {
         $scope.group = data.data;
-        $http.get('/api/v1/students/.json?group_id='+$routeParams.groupId)
+        $http.get('/api/v1/students/?group_id='+$routeParams.groupId)
         .success(function(data) {
             $scope.students = data.data;
             for(var i = 0; i<$scope.students.length; i++){
@@ -122,7 +122,7 @@ StudentBaseApp.controller('GroupEdit', function($scope, $http, $location, $route
 });
 
 StudentBaseApp.controller('GroupDelete', function($scope, $http, $location, $routeParams) {
-    $http.get('/api/v1/group/'+ $routeParams.groupId +'/.json').success(function(data) {
+    $http.get('/api/v1/group/'+ $routeParams.groupId +'/').success(function(data) {
         $scope.group = data.data;
     });
 
@@ -135,7 +135,7 @@ StudentBaseApp.controller('GroupDelete', function($scope, $http, $location, $rou
 });
 
 StudentBaseApp.controller('StudentAdd', function($scope, $http, $location, $routeParams) {
-    $http.get('/api/v1/group/.json').success(function(data){
+    $http.get('/api/v1/group/').success(function(data){
         $scope.groups = data.data;
     })
     $scope.group_id = $routeParams.group_id;
@@ -154,10 +154,10 @@ StudentBaseApp.controller('StudentAdd', function($scope, $http, $location, $rout
 });
 
 StudentBaseApp.controller('StudentEdit', function($scope, $http, $location, $routeParams) {
-    $http.get('/api/v1/students/'+ $routeParams.studentId +'/.json').success(function(data) {
+    $http.get('/api/v1/students/'+ $routeParams.studentId +'/').success(function(data) {
         $scope.student = data.data;
         $scope.student.birthday = new Date($scope.student.birthday);
-        $http.get('/api/v1/group/.json').success(function(data) {
+        $http.get('/api/v1/group/').success(function(data) {
             $scope.groups = data.data;
             for(var i = 0; i<$scope.groups.length; i++){
                 if($scope.groups[i].id == $scope.student.group){
@@ -183,7 +183,7 @@ StudentBaseApp.controller('StudentEdit', function($scope, $http, $location, $rou
 });
 
 StudentBaseApp.controller('StudentDelete', function($scope, $http, $location, $routeParams) {
-    $http.get('/api/v1/students/'+ $routeParams.studentId +'/.json').success(function(data) {
+    $http.get('/api/v1/students/'+ $routeParams.studentId +'/').success(function(data) {
         $scope.student = data.data;
     });
 

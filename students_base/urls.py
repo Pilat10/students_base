@@ -38,7 +38,6 @@ urlpatterns = patterns('',
         {'next_page': 'group_list'}, name='logout'),
     url(r'^ang/api-auth/', include('rest_framework.urls',
                                namespace='rest_framework')),
-    #url(r'^ang/', include(ang_urls, namespace='ang')),
     url(r'^docs/', include('rest_framework_swagger.urls')),
     url(r'^ang/.*$', TemplateView.as_view(
         template_name='index_angular.html')),
