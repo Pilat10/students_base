@@ -1,13 +1,12 @@
 from rest_framework import serializers
 from base.models import Student, Group
+from django.contrib.auth.models import User
 
 
 class StudentSerializer(serializers.ModelSerializer):
     """
 
     """
-    #group = GroupNameSerializer()
-
     class Meta:
         model = Student
         fields = (
@@ -23,7 +22,6 @@ class GroupSerializer(serializers.ModelSerializer):
     """
 
     """
-    #headman = StudentFioSerializer()
     count = serializers.SerializerMethodField('count_student')
     headman_name = serializers.SerializerMethodField('headman_name_fun')
 
@@ -43,6 +41,17 @@ class GroupSerializer(serializers.ModelSerializer):
             "headman_name"
         )
 
-#    def is_valid(self):
-#        stud = Student.objects.get(pk=self)
-#        return super(GroupSerializer, self).is_valid()
+
+class UserSerializer(serializers.ModelSerializer):
+    """
+
+    """
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+        )

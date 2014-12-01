@@ -39,8 +39,8 @@ INSTALLED_APPS = (
 )
 
 PROJECT_APPS = (
-    'rest_framework',
     'base',
+    'rest_framework',
     'rest_framework_swagger',
 )
 
@@ -90,6 +90,15 @@ AUTHENTICATION_BACKENDS = (
     'base.auth.MyAuth',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    )
+}
 
 SWAGGER_SETTINGS = {
     "exclude_namespaces": [],
