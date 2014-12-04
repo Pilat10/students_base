@@ -5,11 +5,23 @@ from base.signals import obj_save, obj_delete
 # Create your models here.
 
 
+class Department(models.Model):
+    """
+
+    """
+    name_department = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return self.name_department
+
+
 class Group(models.Model):
     """
 
     """
     name = models.CharField(max_length=255)
+    #department = models.IntegerField(null=True, default=1)
+    department = models.ForeignKey("Department", related_name='++', blank=True, null=True, on_delete=models.SET_NULL)
     headman = models.OneToOneField(
         "Student", related_name='+', blank=True, null=True,
         on_delete=models.SET_NULL)

@@ -13,3 +13,4 @@ class GroupForm(ModelForm):
 
     class Meta:
         model = Group
+        fields = "__all__"
