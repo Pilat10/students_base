@@ -1,0 +1,311 @@
+[
+{
+    "fields": {
+        "department": 1,
+        "name": "group 1",
+        "headman": 3
+    },
+    "model": "base.group",
+    "pk": 1
+},
+{
+    "fields": {
+        "department": 1,
+        "name": "group 2",
+        "headman": 6
+    },
+    "model": "base.group",
+    "pk": 2
+},
+{
+    "fields": {
+        "department": 1,
+        "name": "group 3",
+        "headman": 11
+    },
+    "model": "base.group",
+    "pk": 3
+},
+{
+    "fields": {
+        "department": 2,
+        "name": "group 4",
+        "headman": 17
+    },
+    "model": "base.group",
+    "pk": 4
+},
+{
+    "fields": {
+        "department": 2,
+        "name": "group 5",
+        "headman": 22
+    },
+    "model": "base.group",
+    "pk": 6
+},
+{
+    "fields": {
+        "name_department": "Dep 1"
+    },
+    "model": "base.department",
+    "pk": 1
+},
+{
+    "fields": {
+        "name_department": "Dep 2"
+    },
+    "model": "base.department",
+    "pk": 2
+},
+{
+    "fields": {
+        "birthday": "2014-08-21",
+        "group": 1,
+        "fio": "\u0441\u0442\u0443\u0434\u0435\u043d\u0442 1",
+        "number_student_cart": 123
+    },
+    "model": "base.student",
+    "pk": 1
+},
+{
+    "fields": {
+        "birthday": "2013-08-12",
+        "group": 1,
+        "fio": "\u0441\u0442\u0443\u0434\u0435\u043d\u0442 2",
+        "number_student_cart": 14444
+    },
+    "model": "base.student",
+    "pk": 2
+},
+{
+    "fields": {
+        "birthday": "2013-08-12",
+        "group": 1,
+        "fio": "\u0441\u0442\u0443\u0434\u0435\u043d\u0442 3",
+        "number_student_cart": 14444
+    },
+    "model": "base.student",
+    "pk": 3
+},
+{
+    "fields": {
+        "birthday": "2013-08-12",
+        "group": 1,
+        "fio": "\u0441\u0442\u0443\u0434\u0435\u043d\u0442 4",
+        "number_student_cart": 14444
+    },
+    "model": "base.student",
+    "pk": 4
+},
+{
+    "fields": {
+        "birthday": "2013-08-12",
+        "group": 1,
+        "fio": "\u0441\u0442\u0443\u0434\u0435\u043d\u0442 5",
+        "number_student_cart": 14444
+    },
+    "model": "base.student",
+    "pk": 5
+},
+{
+    "fields": {
+        "birthday": "2013-08-12",
+        "group": 2,
+        "fio": "\u0441\u0442\u0443\u0434\u0435\u043d\u0442 6",
+        "number_student_cart": 14444
+    },
+    "model": "base.student",
+    "pk": 6
+},
+{
+    "fields": {
+        "birthday": "2013-08-12",
+        "group": 2,
+        "fio": "\u0441\u0442\u0443\u0434\u0435\u043d\u0442 7",
+        "number_student_cart": 14444
+    },
+    "model": "base.student",
+    "pk": 7
+},
+{
+    "fields": {
+        "birthday": "2013-08-12",
+        "group": 2,
+        "fio": "\u0441\u0442\u0443\u0434\u0435\u043d\u0442 8",
+        "number_student_cart": 14444
+    },
+    "model": "base.student",
+    "pk": 8
+},
+{
+    "fields": {
+        "birthday": "2013-08-12",
+        "group": 2,
+        "fio": "\u0441\u0442\u0443\u0434\u0435\u043d\u0442 9",
+        "number_student_cart": 14444
+    },
+    "model": "base.student",
+    "pk": 9
+},
+{
+    "fields": {
+        "birthday": "2013-08-12",
+        "group": 2,
+        "fio": "\u0441\u0442\u0443\u0434\u0435\u043d\u0442 10",
+        "number_student_cart": 14444
+    },
+    "model": "base.student",
+    "pk": 10
+},
+{
+    "fields": {
+        "birthday": "2013-08-12",
+        "group": 3,
+        "fio": "\u0441\u0442\u0443\u0434\u0435\u043d\u0442 11",
+        "number_student_cart": 14444
+    },
+    "model": "base.student",
+    "pk": 11
+},
+{
+    "fields": {
+        "birthday": "2013-08-12",
+        "group": 3,
+        "fio": "\u0441\u0442\u0443\u0434\u0435\u043d\u0442 12",
+        "number_student_cart": 14444
+    },
+    "model": "base.student",
+    "pk": 12
+},
+{
+    "fields": {
+        "birthday": "2013-08-12",
+        "group": 3,
+        "fio": "\u0441\u0442\u0443\u0434\u0435\u043d\u0442 13",
+        "number_student_cart": 14444
+    },
+    "model": "base.student",
+    "pk": 13
+},
+{
+    "fields": {
+        "birthday": "2013-08-12",
+        "group": 3,
+        "fio": "\u0441\u0442\u0443\u0434\u0435\u043d\u0442 14",
+        "number_student_cart": 14444
+    },
+    "model": "base.student",
+    "pk": 14
+},
+{
+    "fields": {
+        "birthday": "2013-08-12",
+        "group": 3,
+        "fio": "\u0441\u0442\u0443\u0434\u0435\u043d\u0442 15",
+        "number_student_cart": 14444
+    },
+    "model": "base.student",
+    "pk": 15
+},
+{
+    "fields": {
+        "birthday": "1991-03-18",
+        "group": 4,
+        "fio": "\u0441\u0442\u0443\u0434\u0435\u043d\u0442 16",
+        "number_student_cart": 124552
+    },
+    "model": "base.student",
+    "pk": 16
+},
+{
+    "fields": {
+        "birthday": "1990-04-13",
+        "group": 4,
+        "fio": "\u0441\u0442\u0443\u0434\u0435\u043d\u0442 17",
+        "number_student_cart": 452829
+    },
+    "model": "base.student",
+    "pk": 17
+},
+{
+    "fields": {
+        "birthday": "1990-04-13",
+        "group": 4,
+        "fio": "\u0441\u0442\u0443\u0434\u0435\u043d\u0442 18",
+        "number_student_cart": 452829
+    },
+    "model": "base.student",
+    "pk": 19
+},
+{
+    "fields": {
+        "birthday": "1993-06-03",
+        "group": 4,
+        "fio": "\u0441\u0442\u0443\u0434\u0435\u043d\u0442 19",
+        "number_student_cart": 452829
+    },
+    "model": "base.student",
+    "pk": 20
+},
+{
+    "fields": {
+        "birthday": "1995-12-25",
+        "group": 4,
+        "fio": "\u0441\u0442\u0443\u0434\u0435\u043d\u0442 20",
+        "number_student_cart": 452829
+    },
+    "model": "base.student",
+    "pk": 21
+},
+{
+    "fields": {
+        "birthday": "1992-11-03",
+        "group": 6,
+        "fio": "student 21",
+        "number_student_cart": 654732
+    },
+    "model": "base.student",
+    "pk": 22
+},
+{
+    "fields": {
+        "birthday": "1991-11-03",
+        "group": 6,
+        "fio": "student 22",
+        "number_student_cart": 743345
+    },
+    "model": "base.student",
+    "pk": 23
+},
+{
+    "fields": {
+        "birthday": "1992-10-06",
+        "group": 6,
+        "fio": "student 23",
+        "number_student_cart": 864565
+    },
+    "model": "base.student",
+    "pk": 24
+},
+{
+    "fields": {
+        "birthday": "1992-05-23",
+        "group": 6,
+        "fio": "student 24",
+        "number_student_cart": 876765
+    },
+    "model": "base.student",
+    "pk": 25
+},
+{
+    "fields": {
+        "birthday": "1991-12-25",
+        "group": 6,
+        "fio": "student 25",
+        "number_student_cart": 334564
+    },
+    "model": "base.student",
+    "pk": 26
+}
+]
