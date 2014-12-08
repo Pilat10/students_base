@@ -1,13 +1,35 @@
-from api.serializers import StudentSerializer, GroupSerializer, UserSerializer
+from api.serializers import StudentSerializer, GroupSerializer, \
+    UserSerializer, DepartmentSerializer
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.status import HTTP_401_UNAUTHORIZED
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import AnonymousUser
-from base.models import Group, Student
+from base.models import Group, Student, Department
 from api.mixins import ResponseDataWrapperMixin
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
+
+
+class DepartmentListView(ResponseDataWrapperMixin, generics.ListCreateAPIView):
+    """
+    <pre>
+    {
+        "name_department": "dep 3"
+    }
+    </pre>
+    """
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
+
+
+class DepartmentDetailView(ResponseDataWrapperMixin,
+                           generics.RetrieveUpdateDestroyAPIView):
+    """
+
+    """
+    model = Department
+    serializer_class = DepartmentSerializer
 
 
 class GroupListView(ResponseDataWrapperMixin, generics.ListCreateAPIView):
@@ -15,12 +37,20 @@ class GroupListView(ResponseDataWrapperMixin, generics.ListCreateAPIView):
     <pre>
     {
         "name": "group 5",
+        "department": 1,
         "headman": null
     }
     </pre>
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
+    def get_queryset(self):
+        department_id = self.request.QUERY_PARAMS.get('department_id', None)
+        if department_id is not None:
+            return super(GroupListView, self).get_queryset().filter(
+                department__pk=department_id)
+        return super(GroupListView, self).get_queryset()
 
 
 class GroupDetailView(ResponseDataWrapperMixin,
