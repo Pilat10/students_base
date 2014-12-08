@@ -19,4 +19,6 @@ class MyMiddleware:
                     {'count': len(connection.queries), 'time': time}))))
         except KeyError:
             pass
+        except TypeError:
+            pass
         return response

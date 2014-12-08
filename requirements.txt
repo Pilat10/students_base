@@ -1,3 +1,5 @@
-Django==1.6.5
+Django==1.7.1
 Djangorestframework==2.4.3
 Markdown==2.5.1
+django-filter
+django-rest-swagger

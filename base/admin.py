@@ -1,5 +1,5 @@
 from django.contrib import admin
-from base.models import Student, Group
+from base.models import Student, Group, Department
 from base.signal_models import LogEntry
 from base.forms import GroupForm
 
@@ -16,3 +16,4 @@ class GroupAdmin(admin.ModelAdmin):
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Student)
 admin.site.register(LogEntry)
+admin.site.register(Department)

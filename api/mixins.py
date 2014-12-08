@@ -9,7 +9,8 @@ SUCCESS_STATUS_CODES = (
 FAIL_STATUS_CODES = (
     480,
     400,
-    405
+    401,
+    405,
 )
 class ResponseDataWrapperMixin(object):
     """

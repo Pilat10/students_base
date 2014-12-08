@@ -1,0 +1,7 @@
+<p>group_add</p>
+<form name="groupFormAdd" ng-submit="submit()">
+    <p>Name: <input type="text" name="nameGroup" ng-model="group.name" required /></p>
+
+    <input type="submit" id="submit" ng-disabled="groupFormAdd.$invalid" value="Add group" />
+</form>
+<a href="groups/">Back</a>

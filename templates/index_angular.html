@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="AngularApp">
+<head>
+    <base href="/ang/" />
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" >
+    <link rel="stylesheet" type="text/css" href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}" >
+    <title></title>
+
+</head>
+<body>
+    <div id="base">
+        <div class="content">
+
+                <div ng-controller="MainController">
+
+                  <div ng-view></div>
+                  <hr />
+                    {% verbatim %}
+                      <pre>$location.path() = {{ $location.path() }}</pre>
+                      <pre>$route.current.templateUrl = {{ $route.current.templateUrl }}</pre>
+                      <pre>$route.current.params = {{ $route.current.params }}</pre>
+                      <pre>$route.current.scope.name = {{ $route.current.scope.name }}</pre>
+                      <pre>$routeParams = {{ $routeParams }}</pre>
+                    {% endverbatim %}
+                </div>
+
+        </div>
+    </div>
+    <script type="text/javascript" src="{% static 'bower_components/angular/angular.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bower_components/angular-route/angular-route.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'controller.js' %}"></script>
+    <script>
+        {% load staticfiles %}
+        vars = {
+            static: '{% static '' %}',
+            static_teampleate: '{% static 'views/' %}'
+        }
+    </script>
+</body>
+</html>
