@@ -4,12 +4,14 @@ Api mixins module
 SUCCESS_STATUS_CODES = (
     200,
     201,
+    204,
 )
 
 FAIL_STATUS_CODES = (
     480,
     400,
     401,
+    404,
     405,
 )
 class ResponseDataWrapperMixin(object):
