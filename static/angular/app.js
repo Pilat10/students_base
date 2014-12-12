@@ -1,4 +1,16 @@
-var StudentBaseApp = angular.module('AngularApp')
+var StudentBaseApp = angular.module('AngularApp', [
+    'ngRoute',
+    'angularControllers',
+    'angularServices',
+]);
+
+var configHttpProvider = function($httpProvider) {
+    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+};
+
+StudentBaseApp.config(['$httpProvider', configHttpProvider]);
+
 StudentBaseApp.config(function($routeProvider, $locationProvider) {
     $routeProvider
     .when('/login', {
@@ -47,3 +59,7 @@ StudentBaseApp.config(function($routeProvider, $locationProvider) {
 
     $locationProvider.html5Mode(true);
 });
+
+StudentBaseApp.directive('myLog', ['LoginService', function(LoginService) {
+
+}]);

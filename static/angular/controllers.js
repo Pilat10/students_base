@@ -1,43 +1,17 @@
-var configHttpProvider = function($httpProvider) {
-    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
-    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
-};
+'use strict';
 
+/* Controllers */
 
+var angularControllers = angular.module('angularControllers', []);
 
-var StudentBaseApp = angular.module('AngularApp', ['ngRoute']);
-
-StudentBaseApp.config(['$httpProvider', configHttpProvider]);
-
-StudentBaseApp.factory('LoginService', ['$http', function($http) {
-    return {
-        apiBase: '/api/v1/auth/',
-        http: $http,
-        userService: "userService",
-        isLogged: function(){
-            return this.http.get(this.apiBase);
-        },
-        login: function(user){
-            return this.http.post(this.apiBase, user);
-        },
-        logout: function(){
-            return this.http.delete(this.apiBase);
-        }
-    }
-}]);
-
-StudentBaseApp.directive('myLog', ['LoginService', function(LoginService) {
-
-}]);
-
-StudentBaseApp.controller('MainController', function($scope, $route, $routeParams, $location, LoginService) {
+angularControllers.controller('MainController', function($scope, $route, $routeParams, $location, LoginService) {
     $scope.log = LoginService.isLogged()
     $scope.$route = $route;
     $scope.$location = $location;
     $scope.$routeParams = $routeParams;
 });
 
-StudentBaseApp.controller('LoginCtrl', function($scope, LoginService, $location){
+angularControllers.controller('LoginCtrl', function($scope, LoginService, $location){
 
     //$scope.loginn =
     LoginService.isLogged().success(function(data){
@@ -63,13 +37,13 @@ StudentBaseApp.controller('LoginCtrl', function($scope, LoginService, $location)
     };
 });
 
-StudentBaseApp.controller('LogoutCtrl', function($scope, LoginService, $location){
+angularControllers.controller('LogoutCtrl', function($scope, LoginService, $location){
    LoginService.logout().success(function(){
        $location.path('/').replace();
    })
 });
 
-StudentBaseApp.controller('GroupList', function($scope, $http, LoginService) {
+angularControllers.controller('GroupList', function($scope, $http, LoginService) {
     LoginService.isLogged().success(function(data){
         $scope.user = data.data.user;
     });
@@ -84,7 +58,7 @@ StudentBaseApp.controller('GroupList', function($scope, $http, LoginService) {
     })
 });
 
-StudentBaseApp.controller('StudentList', function($scope, $http, $routeParams) {
+angularControllers.controller('StudentList', function($scope, $http, $routeParams) {
     $http.get('/api/v1/student/?group_id='+$routeParams.groupId)
         .success(function(data) {
             $scope.students = data;
@@ -97,7 +71,7 @@ StudentBaseApp.controller('StudentList', function($scope, $http, $routeParams) {
     })
 });
 
-StudentBaseApp.controller('GroupAdd', function($scope, $http, $location) {
+angularControllers.controller('GroupAdd', function($scope, $http, $location) {
     $scope.submit = function() {
         if ($scope.group.name) {
             $scope.group.headman = '';
@@ -109,7 +83,7 @@ StudentBaseApp.controller('GroupAdd', function($scope, $http, $location) {
     };
 });
 
-StudentBaseApp.controller('GroupEdit', function($scope, $http, $location, $routeParams) {
+angularControllers.controller('GroupEdit', function($scope, $http, $location, $routeParams) {
     $http.get('/api/v1/group/'+ $routeParams.groupId +'/').success(function(data) {
         $scope.group = data.data;
         $http.get('/api/v1/student/?group_id='+$routeParams.groupId)
@@ -139,7 +113,7 @@ StudentBaseApp.controller('GroupEdit', function($scope, $http, $location, $route
     };
 });
 
-StudentBaseApp.controller('GroupDelete', function($scope, $http, $location, $routeParams) {
+angularControllers.controller('GroupDelete', function($scope, $http, $location, $routeParams) {
     $http.get('/api/v1/group/'+ $routeParams.groupId +'/').success(function(data) {
         $scope.group = data.data;
     });
@@ -152,7 +126,7 @@ StudentBaseApp.controller('GroupDelete', function($scope, $http, $location, $rou
     };
 });
 
-StudentBaseApp.controller('StudentAdd', function($scope, $http, $location, $routeParams) {
+angularControllers.controller('StudentAdd', function($scope, $http, $location, $routeParams) {
     $http.get('/api/v1/group/').success(function(data){
         $scope.groups = data.data;
     })
@@ -171,7 +145,7 @@ StudentBaseApp.controller('StudentAdd', function($scope, $http, $location, $rout
     };
 });
 
-StudentBaseApp.controller('StudentEdit', function($scope, $http, $location, $routeParams) {
+angularControllers.controller('StudentEdit', function($scope, $http, $location, $routeParams) {
     $http.get('/api/v1/student/'+ $routeParams.studentId +'/').success(function(data) {
         $scope.student = data.data;
         $scope.student.birthday = new Date($scope.student.birthday);
@@ -200,7 +174,7 @@ StudentBaseApp.controller('StudentEdit', function($scope, $http, $location, $rou
     };
 });
 
-StudentBaseApp.controller('StudentDelete', function($scope, $http, $location, $routeParams) {
+angularControllers.controller('StudentDelete', function($scope, $http, $location, $routeParams) {
     $http.get('/api/v1/student/'+ $routeParams.studentId +'/').success(function(data) {
         $scope.student = data.data;
     });
