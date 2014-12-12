@@ -4,17 +4,25 @@
     <base href="/ang/" />
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" >
+    <link rel="stylesheet" type="text/css" href="{% static 'angular/css/style.css' %}" >
     <link rel="stylesheet" type="text/css" href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}" >
     <title></title>
 
 </head>
-<body>
-    <div id="base">
-        <div class="content">
+<body ng-controller="MainController">
+    <div class="container header">
+        {% verbatim %}
+        <h3 class="text-muted pull-left">My Project</h3>
+        <h3 class="pull-right"></h3>
+        {% endverbatim %}
+    </div>
+    <div class="container theme-showcase" >
 
-                <div ng-controller="MainController">
+            <div ng-view></div>
 
-                  <div ng-view></div>
+                <div>
+
+
                   <hr />
                     {% verbatim %}
                       <pre>$location.path() = {{ $location.path() }}</pre>
@@ -25,11 +33,12 @@
                     {% endverbatim %}
                 </div>
 
-        </div>
+
     </div>
     <script type="text/javascript" src="{% static 'bower_components/angular/angular.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'bower_components/angular-route/angular-route.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'controller.js' %}"></script>
+    <script type="text/javascript" src="{% static 'urls.js' %}"></script>
     <script>
         {% load staticfiles %}
         vars = {
