@@ -3,9 +3,9 @@
 <head>
     <base href="/ang/" />
     {% load staticfiles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" >
     <link rel="stylesheet" type="text/css" href="{% static 'angular/css/style.css' %}" >
-    <link rel="stylesheet" type="text/css" href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}" >
+    <link rel="stylesheet" type="text/css" href="{% static 'angular/css/style.css' %}" >
+    <link rel="stylesheet" type="text/css" href="{% static 'angular/bower_components/bootstrap/dist/css/bootstrap.min.css' %}" >
     <title></title>
 
 </head>
@@ -35,16 +35,15 @@
 
 
     </div>
-    <script type="text/javascript" src="{% static 'bower_components/angular/angular.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bower_components/angular-route/angular-route.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'app.js' %}"></script>
-    <script type="text/javascript" src="{% static 'controllers.js' %}"></script>
-    <script type="text/javascript" src="{% static 'services.js' %}"></script>
+    <script type="text/javascript" src="{% static 'angular/bower_components/angular/angular.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'angular/bower_components/angular-route/angular-route.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'angular/js/app.js' %}"></script>
+    <script type="text/javascript" src="{% static 'angular/js/controllers.js' %}"></script>
+    <script type="text/javascript" src="{% static 'angular/js/services.js' %}"></script>
     <script>
-        {% load staticfiles %}
         vars = {
             static: '{% static '' %}',
-            static_teampleate: '{% static 'views/' %}'
+            static_teampleate: '{% static 'angular/views/' %}'
         }
     </script>
 </body>
