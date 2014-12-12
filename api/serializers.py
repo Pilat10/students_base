@@ -75,10 +75,10 @@ class GroupSerializer(serializers.ModelSerializer):
     """
 
     """
-    count = serializers.SerializerMethodField('count_student')
+    count_student = serializers.SerializerMethodField('count_student_fun')
     headman_name = serializers.SerializerMethodField('headman_name_fun')
 
-    def count_student(self, obj):
+    def count_student_fun(self, obj):
         return obj.student_set.count()
 
     def headman_name_fun(self, obj):
@@ -90,7 +90,7 @@ class GroupSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "department",
-            "count",
+            "count_student",
             "headman",
             "headman_name"
         )

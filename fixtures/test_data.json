@@ -3,7 +3,7 @@
     "fields": {
         "department": 1,
         "name": "group 1",
-        "headman": 3
+        "headman": null
     },
     "model": "base.group",
     "pk": 1

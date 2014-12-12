@@ -1,4 +1,4 @@
- var configHttpProvider = function($httpProvider) {
+var configHttpProvider = function($httpProvider) {
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 };
