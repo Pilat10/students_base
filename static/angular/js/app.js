@@ -1,4 +1,9 @@
-var StudentBaseApp = angular.module('AngularApp', [
+vars = {
+    static: '/static/',
+    static_teampleate: '/static/angular/views/'
+}
+
+var StudentBaseApp = angular.module('angularApp', [
     'ngRoute',
     'angularControllers',
     'angularServices',

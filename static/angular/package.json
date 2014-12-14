@@ -1,0 +1,17 @@
+{
+  "name": "angular",
+  "version": "0.0.0",
+  "description": "My app description",
+  "license": "BSD-2-Clause",
+  "devDependencies": {
+    "karma": "~0.12.28",
+    "jasmine-core": "~2.1.3",
+    "karma-jasmine": "~0.3.2",
+    "karma-chrome-launcher": "~0.1.7",
+    "karma-firefox-launcher": "~0.1.3",
+    "karma-opera-launcher": "~0.1.0"
+  },
+  "scripts": {
+    "test": "karma start test/karma.conf.js"
+  }
+}

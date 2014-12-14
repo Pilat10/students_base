@@ -43,9 +43,12 @@ angularControllers.controller('LogoutCtrl', function($scope, LoginService, $loca
    })
 });
 
-angularControllers.controller('GroupList', function($scope, $http, LoginService) {
+angularControllers.controller('GroupList', function($scope, $http, LoginService, $rootScope) {
     LoginService.isLogged().success(function(data){
-        $scope.user = data.data.user;
+        $rootScope.user = data.data.user;
+        $scope.userr = data.data.user;
+    }).error(function(data){
+        $rootScope.user = "";
     });
 
     $http.get('/api/v1/group/').success(function(data) {

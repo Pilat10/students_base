@@ -1,7 +1,6 @@
 {
-  "name": "AngularApp",
+  "name": "angularApp",
   "version": "0.0.0",
-  "main": "./app.js",
   "homepage": "https://github.com/Pilat10/students_base",
   "authors": [
     "Anton <pilat1091@gmail.com>"
@@ -17,6 +16,7 @@
   "dependencies": {
     "angular": "~1.3.4",
     "angular-route": "~1.3.4",
-    "bootstrap": "~3.3.1"
+    "bootstrap": "~3.3.1",
+    "angular-mocks": "~1.3.6"
   }
 }
