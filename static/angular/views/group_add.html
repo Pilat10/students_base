@@ -1,7 +1,68 @@
-<p>group_add</p>
-<form name="groupFormAdd" ng-submit="submit()">
-    <p>Name: <input type="text" name="nameGroup" ng-model="group.name" required /></p>
+<div navbar></div>
+<div class="container theme-showcase" >
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3" ng-show="error">
+            <p class="alert alert-danger">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                {{ error }}
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label for="name-group" class="col-sm-4 control-label">Name group</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="name-group" placeholder="Name group" ng-model="group.name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name-department" class="col-sm-4 control-label">Department</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" ng-model="group.department" ng-options="department.name_department for department in departments" required>
+                            <option value="">--------</option>
+                        </select>
+                    </div>
+                </div>
 
-    <input type="submit" id="submit" ng-disabled="groupFormAdd.$invalid" value="Add group" />
-</form>
-<a href="groups/">Back</a>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3">
+                            <h3 class="text-center">Headman</h3>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="fio" class="col-sm-4 control-label">FIO student</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="fio" placeholder="FIO student" ng-model="student.fio">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="birthday" class="col-sm-4 control-label">Birthday</label>
+                    <div class="col-sm-8">
+                        <input type="date" class="form-control" id="birthday" placeholder="yyyy-MM-dd" ng-model="student.birthday">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="numberCart" class="col-sm-4 control-label">Number student cart</label>
+                    <div class="col-sm-8">
+                        <input type="number" class="form-control" id="numberCart" placeholder="Number student cart:" ng-model="student.number_student_cart">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <button type="submit" class="btn btn-success btn-block" ng-click="submit()">Add group</button>
+                        <a href="{{ backUrl }}" class="btn btn-primary btn-block">Back</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    {{ st | json }}
+</div>

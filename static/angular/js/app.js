@@ -18,13 +18,37 @@ StudentBaseApp.config(['$httpProvider', configHttpProvider]);
 
 StudentBaseApp.config(function($routeProvider, $locationProvider) {
     $routeProvider
+    .when('/' , {
+        templateUrl: vars.static_teampleate + 'home.html',
+        controller: 'HomeCtrl'
+    })
     .when('/login', {
         templateUrl: vars.static_teampleate + 'login.html',
         controller: 'LoginCtrl'
     })
     .when('/logout', {
-            templateUrl: vars.static_teampleate + 'logout.html',
+        templateUrl: vars.static_teampleate + 'logout.html',
         controller: 'LogoutCtrl'
+    })
+    .when('/departments', {
+        templateUrl: vars.static_teampleate + 'department_list.html',
+        controller: 'DepartmentListCtrl'
+    })
+    .when('/departments/:departmentId', {
+        templateUrl: vars.static_teampleate + 'group_list.html',
+        controller: 'GroupList'
+    })
+    .when('/department/add', {
+        templateUrl: vars.static_teampleate + 'department_add.html',
+        controller: 'DepartmentAddCtrl'
+    })
+    .when('/department/edit/:departmentId', {
+        templateUrl: vars.static_teampleate + 'department_edit.html',
+        controller: 'DepartmentEditCtrl'
+    })
+    .when('/department/delete/:departmentId', {
+        templateUrl: vars.static_teampleate + 'department_delete.html',
+        controller: 'DepartmentDeleteCtrl'
     })
     .when('/groups', {
         templateUrl: vars.static_teampleate + 'group_list.html',
@@ -34,15 +58,15 @@ StudentBaseApp.config(function($routeProvider, $locationProvider) {
         templateUrl: vars.static_teampleate + 'student_list.html',
         controller: 'StudentList'
     })
-    .when('/group_add', {
+    .when('/group/add', {
         templateUrl: vars.static_teampleate + 'group_add.html',
         controller: 'GroupAdd'
     })
-    .when('/groups/edit/:groupId', {
+    .when('/group/edit/:groupId', {
         templateUrl: vars.static_teampleate + 'group_edit.html',
         controller: 'GroupEdit'
     })
-    .when('/groups/delete/:groupId', {
+    .when('/group/delete/:groupId', {
         templateUrl: vars.static_teampleate + 'group_delete.html',
         controller: 'GroupDelete'
     })
@@ -58,13 +82,15 @@ StudentBaseApp.config(function($routeProvider, $locationProvider) {
         templateUrl: vars.static_teampleate + 'student_delete.html',
         controller: 'StudentDelete'
     })
-    .otherwise({
-        redirectTo:'/groups'
-    });
+//    .otherwise({
+//        redirectTo:'/departments'
+//    });
 
     $locationProvider.html5Mode(true);
 });
 
-StudentBaseApp.directive('myLog', ['LoginService', function(LoginService) {
-
-}]);
+StudentBaseApp.directive('navbar', function() {
+    return {
+        templateUrl: vars.static_teampleate + 'navigation_bar.html'
+    };
+});

@@ -1,15 +1,19 @@
 <div>
     <form class="form-signin" role="form">
         <div class="form-group">
-            <h2>Please sign in</h2>
-            <p class="bg-danger" ng-show="error_data">Please enter the correct username and password!!!</p>
+            <h2>Please log in</h2>
+            <p class="alert alert-danger" ng-show="error_data">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Please enter the correct username and password!!!
+            </p>
             <label for="inputEmail" class="sr-only">Email address</label>
             <input type="text" id="inputEmail" class="form-control" placeholder="Username" ng-model="user.username" required autofocus>
             <label for="inputPassword" class="sr-only">Password</label>
             <input type="password" id="inputPassword" class="form-control" placeholder="Password" ng-model="user.password" required>
         </div>
         <div class="form-group">
-            <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="submit()">Sign in</button>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="submit()">Login</button>
         </div>
     </form>
 </div>

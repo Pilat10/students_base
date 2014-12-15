@@ -1,36 +1,40 @@
-<div ng-if="show_group">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th class="text-center" colspan="4">Group list</th>
-            </tr>
-            <tr>
-                <th>Group name</th>
-                <th>Group student count</th>
-                <th>Group headman</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="group in groups.data">
-                <td>
-                    <a href="groups/{{ group.id }}">{{ group.name }}</a>
-                </td>
-                <td>{{ group.count }}</td>
-                <td>{{ group.headman_name }}</td>
-                <td>
-                    <a href="groups/edit/{{ group.id }}">
-                        <img src="{{ static + 'imeg/edit.png'}} ">
-                    </a>
-                    <a href="groups/delete/{{ group.id }}">
-                        <img src="{{ static + 'imeg/delete.png' }}">
-                    </a>
-                </td>
-            </tr>
-        </tbody>
+<div navbar></div>
+<div class="container theme-showcase" >
+    <div ng-if="show_group">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center" colspan="4">Group list</th>
+                </tr>
+                <tr>
+                    <th>Group name</th>
+                    <th>Group student count</th>
+                    <th>Group headman</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="group in groups.data">
+                    <td>
+                        <a href="groups/{{ group.id }}">{{ group.name }}</a>
+                    </td>
+                    <td>{{ group.count_student }}</td>
+                    <td>{{ group.headman_name }}</td>
+                    <td>
+                        <button type="button" class="btn btn-info" ng-click="editButton(group.id)">Edit</button>
+                        <button type="button" class="btn btn-danger" ng-click="deleteButton(group.id)">Edit</button>
+                        <!--
+                        <a href="group/edit/{{ group.id }}" class="btn btn-info">Edit</a>
+                        <a href="group/delete/{{ group.id }}" class="btn btn-danger">Delete</a>
+                        -->
+                    </td>
+                </tr>
+            </tbody>
 
-    </table>
-    <p><a href="group_add/">Add group</a></p>
-    <p><a href="/ang/login/" style="float: left">Login</a>{{ user }} {{ userr }}   <a href="/ang/logout/" style="float: right">Logout</a></p>
-    <br>
+        </table>
+        <p class="alert alert-danger text-center" ng-show="notLoggedMsg">You are not logged in!!! Please log in.</p>
+        <button type="button" class="btn btn-success btn-block btn-lg" ng-click="addButton()">Add group</button>
+        <a href="departments/" class="btn btn-primary btn-block btn-lg" ng-show="back_button">Back</a>
+    </div>
+    {{ depId }}
 </div>

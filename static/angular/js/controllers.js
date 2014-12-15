@@ -5,15 +5,26 @@
 var angularControllers = angular.module('angularControllers', []);
 
 angularControllers.controller('MainController', function($scope, $route, $routeParams, $location, LoginService) {
-    $scope.log = LoginService.isLogged()
     $scope.$route = $route;
     $scope.$location = $location;
     $scope.$routeParams = $routeParams;
+    $scope.depId = 1;
+    $scope.setDepId = function(depId) {
+        $scope.depId = depId;
+    };
+});
+
+angularControllers.controller('HomeCtrl', function($scope, $http, $location, LoginService) {
+    LoginService.isLogged().success(function(data){
+        $scope.user = data.data.user;
+        $scope.logged = true;
+    }).error(function() {
+        $scope.logged = false;
+    });
 });
 
 angularControllers.controller('LoginCtrl', function($scope, LoginService, $location){
 
-    //$scope.loginn =
     LoginService.isLogged().success(function(data){
         //$scope.loginn = data;
         $location.path('/').replace();
@@ -32,8 +43,6 @@ angularControllers.controller('LoginCtrl', function($scope, LoginService, $locat
                 password: ""
             };
         });
-
-
     };
 });
 
@@ -43,22 +52,176 @@ angularControllers.controller('LogoutCtrl', function($scope, LoginService, $loca
    })
 });
 
-angularControllers.controller('GroupList', function($scope, $http, LoginService, $rootScope) {
+angularControllers.controller('DepartmentListCtrl', function($scope, $http, $location, LoginService) {
     LoginService.isLogged().success(function(data){
-        $rootScope.user = data.data.user;
-        $scope.userr = data.data.user;
-    }).error(function(data){
-        $rootScope.user = "";
+        $scope.user = data.data.user;
+        $scope.logged = true;
+    }).error(function() {
+        $scope.logged = false;
     });
+    $http.get('/api/v1/department/').success(function(data){
+        $scope.departments = data;
+    });
+    $scope.addButton = function(){
+        if($scope.logged){
+            $location.path('department/add').replace();
+        } else {
+            $scope.notLoggedMsg = true;
+        }
+    };
+    $scope.editButton = function(dep_id){
+        if($scope.logged){
+            $location.path('department/edit/'+dep_id+'/').replace();
+        } else {
+            $scope.notLoggedMsg = true;
+        }
+    };
+    $scope.deleteButton = function(dep_id){
+        if($scope.logged){
+            $location.path('department/delete/'+dep_id+'/').replace();
+        } else {
+            $scope.notLoggedMsg = true;
+        }
+    };
+});
 
-    $http.get('/api/v1/group/').success(function(data) {
+angularControllers.controller('GroupDepartmentListCtrl', function($scope, $http, $routeParams, LoginService) {
+    LoginService.isLogged().success(function(data){
+        $scope.user = data.data.user;
+        $scope.logged = true;
+    }).error(function() {
+        $scope.logged = false;
+    });
+    $http.get('/api/v1/group/?department_id='+$routeParams.departmentId)
+    .success(function(data) {
         $scope.groups = data;
         $scope.show_group=false;
         if (data.status == "success"){
             $scope.show_group=true;
         }
         $scope.static = vars.static;
-    })
+        $scope.department_id = $routeParams.departmentId;
+    });
+    $scope.back_button = true;
+});
+
+angularControllers.controller('DepartmentAddCtrl', function($scope, $http, $location, LoginService) {
+    LoginService.isLogged().success(function(data){
+        $scope.user = data.data.user;
+        $scope.logged = true;
+    }).error(function() {
+        $scope.logged = false;
+        $location.path('/departments').replace();
+    });
+    $scope.department = {
+        "name_department": ""
+    }
+    $scope.submit = function(){
+        if ($scope.department.name_department){
+            $http.post('/api/v1/department/', $scope.department).success(function(){
+                $location.path('/departments').replace();
+            }).error(function(){
+                $scope.error = "Error";
+            });
+        } else {
+            $scope.error = "Name department field is required!!!"
+        }
+    };
+});
+
+angularControllers.controller('DepartmentEditCtrl', function($scope, $http, $location, $routeParams, LoginService) {
+    LoginService.isLogged().success(function(data){
+        $scope.user = data.data.user;
+        $scope.logged = true;
+    }).error(function() {
+        $scope.logged = false;
+        $location.path('/departments').replace();
+    });
+    $http.get('/api/v1/department/'+$routeParams.departmentId+'/').success(function(data){
+        $scope.department = data.data;
+    });
+    $scope.submit = function(){
+        if ($scope.department.name_department){
+            var department = {
+                "name_department": $scope.name_department
+            }
+            $http.put('/api/v1/department/'+$routeParams.departmentId+'/', $scope.department).success(function(){
+                $location.path('/departments').replace();
+            }).error(function(){
+                $scope.error = "Error";
+            });
+        } else {
+            $scope.error = "Name department field is required!!!"
+        }
+    };
+});
+
+angularControllers.controller('DepartmentDeleteCtrl', function($scope, $http, $location, $routeParams, LoginService) {
+    LoginService.isLogged().success(function(data){
+        $scope.user = data.data.user;
+        $scope.logged = true;
+    }).error(function() {
+        $scope.logged = false;
+        $location.path('/departments').replace();
+    });
+    $http.get('/api/v1/department/'+$routeParams.departmentId+'/').success(function(data){
+        $scope.department = data.data;
+    });
+    $scope.submit = function() {
+        $http.delete('/api/v1/department/'+$routeParams.departmentId+'/', $scope.department).success(function(data) {
+            $location.path('/departments').replace();
+        }).error(function(){
+            $scope.error;
+        });
+    };
+});
+
+angularControllers.controller('GroupList', function($scope, $http, $routeParams, $location, LoginService) {
+    LoginService.isLogged().success(function(data){
+        $scope.user = data.data.user;
+        $scope.logged = true;
+    }).error(function() {
+        $scope.logged = false;
+    });
+
+    var dep_url_get = '';
+    if($routeParams.departmentId){
+        $scope.back_button = true;
+        dep_url_get = '?department_id='+$routeParams.departmentId;
+        $scope.setDepId($routeParams.departmentId);
+    } else {
+        $scope.setDepId(false);
+    }
+
+    $http.get('/api/v1/group/'+dep_url_get).success(function(data) {
+        $scope.groups = data;
+        $scope.show_group=false;
+        if (data.status == "success"){
+            $scope.show_group=true;
+        }
+        $scope.static = vars.static;
+    });
+    $scope.addButton = function(){
+        if($scope.logged){
+            $location.path('group/add').replace();
+        } else {
+            $scope.notLoggedMsg = true;
+        }
+    };
+    $scope.editButton = function(dep_id){
+        if($scope.logged){
+            $location.path('group/edit/'+dep_id+'/').replace();
+        } else {
+            $scope.notLoggedMsg = true;
+        }
+    };
+    $scope.deleteButton = function(dep_id){
+        if($scope.logged){
+            $location.path('group/delete/'+dep_id+'/').replace();
+        } else {
+            $scope.notLoggedMsg = true;
+        }
+    };
 });
 
 angularControllers.controller('StudentList', function($scope, $http, $routeParams) {
@@ -74,15 +237,57 @@ angularControllers.controller('StudentList', function($scope, $http, $routeParam
     })
 });
 
-angularControllers.controller('GroupAdd', function($scope, $http, $location) {
+angularControllers.controller('GroupAdd', function($scope, $http, $location, LoginService) {
+    LoginService.isLogged().success(function(data){
+        $scope.user = data.data.user;
+        $scope.logged = true;
+    }).error(function() {
+        $scope.logged = false;
+    });
+
+    if($scope.depId != false){
+        $scope.backUrl = "departments/"+$scope.depId;
+    } else {
+        $scope.backUrl = "groups/";
+    }
+
+    $http.get('/api/v1/department').success(function(data){
+        $scope.departments = data.data;
+
+    });
     $scope.submit = function() {
         if ($scope.group.name) {
-            $scope.group.headman = '';
-            $http.post('/api/v1/group/', $scope.group)
+            var group = {
+                "name": $scope.group.name,
+                "department": $scope.group.department.id,
+                "headman": ''
+            };
+            var date = $scope.student.birthday;
+            var student = {
+                fio: $scope.student.fio,
+                birthday: date.getFullYear().toString()+'-'+(date.getMonth()+1).toString()+'-'+date.getDate().toString(),
+                number_student_cart: $scope.student.number_student_cart
+            };
+            $http.post('/api/v1/group/', group)
             .success(function(data) {
-                $location.path('/groups').replace();
+                student.group = data.data.id;
+
+                $http.post('/api/v1/student/', student).success(function(data){
+                    group.headman = data.data.id;
+                    $http.put('/api/v1/group/'+student.group, group)
+                    .success(function(data) {
+                        if($scope.depId != false){
+                            $location.path('departments/'+group.department).replace();
+                        } else {
+                            $location.path('groups/').replace();
+                        }
+                    });
+                });
+
             });
         }
+
+        $scope.st = student;
     };
 });
 
@@ -129,10 +334,18 @@ angularControllers.controller('GroupDelete', function($scope, $http, $location, 
     };
 });
 
-angularControllers.controller('StudentAdd', function($scope, $http, $location, $routeParams) {
+angularControllers.controller('StudentAdd', function($scope, $http, $location, $routeParams, LoginService) {
+    LoginService.isLogged().success(function(data){
+        $scope.user = data.data.user;
+        $scope.logged = true;
+    }).error(function() {
+        $scope.logged = false;
+    });
+
     $http.get('/api/v1/group/').success(function(data){
         $scope.groups = data.data;
-    })
+    });
+
     $scope.group_id = $routeParams.group_id;
     $scope.submit = function() {
         var date = $scope.student.birthday;
@@ -141,10 +354,10 @@ angularControllers.controller('StudentAdd', function($scope, $http, $location, $
             birthday: date.getFullYear().toString()+'-'+(date.getMonth()+1).toString()+'-'+date.getDate().toString(),
             number_student_cart: $scope.student.number_student_cart,
             group: $scope.student.group.id
-        }
+        };
         $http.post('/api/v1/student/', student).success(function(data){
             $location.path('/groups/'+$scope.student.group.id).replace();
-        })
+        });
     };
 });
 
@@ -169,7 +382,7 @@ angularControllers.controller('StudentEdit', function($scope, $http, $location, 
             birthday: date.getFullYear().toString()+'-'+(date.getMonth()+1).toString()+'-'+date.getDate().toString(),
             number_student_cart: $scope.student.number_student_cart,
             group: $scope.student.group.id
-        }
+        };
         $http.put('/api/v1/student/'+$routeParams.studentId, student)
         .success(function(data) {
             $location.path('/groups/'+$scope.student.group.id).replace();

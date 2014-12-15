@@ -1,0 +1,35 @@
+<div navbar></div>
+<div class="container theme-showcase" >
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center" colspan="5">Department list</th>
+                </tr>
+                <tr>
+                    <th>Department name</th>
+                    <th>Number of groups</th>
+                    <th>Number of students</th>
+                    <th>Average age of students</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="department in departments.data">
+                    <td class="virt-align">
+                        <a href="departments/{{ department.id }}" class="media-middle">{{ department.name_department }}</a>
+                    </td>
+                    <td class="media-middle">{{ department.count_group }}</td>
+                    <td class="media-middle">{{ department.count_student }}</td>
+                    <td class="media-middle">{{ department.avg_age }}</td>
+                    <td class="media-middle">
+                        <button type="button" class="btn btn-info" ng-click="editButton(department.id)">Edit</button>
+                        <button type="button" class="btn btn-danger" ng-click="deleteButton(department.id)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <p class="alert alert-danger text-center" ng-show="notLoggedMsg">You are not logged in!!! Please log in.</p>
+    <button type="button" class="btn btn-success btn-block btn-lg" ng-click="addButton()">Add department</button>
+</div>
