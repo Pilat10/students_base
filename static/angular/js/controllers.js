@@ -253,8 +253,8 @@ angularControllers.controller('GroupAdd', function($scope, $http, $location, Log
 
     $http.get('/api/v1/department').success(function(data){
         $scope.departments = data.data;
-
     });
+
     $scope.submit = function() {
         if ($scope.group.name) {
             var group = {
@@ -283,15 +283,25 @@ angularControllers.controller('GroupAdd', function($scope, $http, $location, Log
                         }
                     });
                 });
-
             });
         }
-
-        $scope.st = student;
     };
 });
 
-angularControllers.controller('GroupEdit', function($scope, $http, $location, $routeParams) {
+angularControllers.controller('GroupEdit', function($scope, $http, $location, $routeParams, LoginService) {
+    LoginService.isLogged().success(function(data){
+        $scope.user = data.data.user;
+        $scope.logged = true;
+    }).error(function() {
+        $scope.logged = false;
+    });
+
+    if($scope.depId != false){
+        $scope.backUrl = "departments/"+$scope.depId;
+    } else {
+        $scope.backUrl = "groups/";
+    }
+
     $http.get('/api/v1/group/'+ $routeParams.groupId +'/').success(function(data) {
         $scope.group = data.data;
         $http.get('/api/v1/student/?group_id='+$routeParams.groupId)
@@ -303,6 +313,14 @@ angularControllers.controller('GroupEdit', function($scope, $http, $location, $r
                 }
             }
         })
+        $http.get('/api/v1/department').success(function(data){
+            $scope.departments = data.data;
+            for(var i = 0; i < $scope.departments.length; i++){
+                if($scope.departments[i].id == $scope.group.department){
+                    $scope.group.department = $scope.departments[i];
+                }
+            }
+        });
     });
 
     $scope.submit = function() {
@@ -312,24 +330,46 @@ angularControllers.controller('GroupEdit', function($scope, $http, $location, $r
             } else {
                 $scope.group.headman = '';
             }
+            $scope.group.department = $scope.group.department.id;
 
             $http.put('/api/v1/group/'+$routeParams.groupId, $scope.group)
             .success(function(data) {
-                $location.path('/groups').replace();
+                if($scope.depId != false){
+                    $location.path('departments/'+$scope.group.department).replace();
+                } else {
+                    $location.path('groups/').replace();
+                }
             });
         }
     };
 });
 
-angularControllers.controller('GroupDelete', function($scope, $http, $location, $routeParams) {
+angularControllers.controller('GroupDelete', function($scope, $http, $location, $routeParams, LoginService) {
+    LoginService.isLogged().success(function(data){
+        $scope.user = data.data.user;
+        $scope.logged = true;
+    }).error(function() {
+        $scope.logged = false;
+    });
+
+    if($scope.depId != false){
+        $scope.backUrl = "departments/"+$scope.depId;
+    } else {
+        $scope.backUrl = "groups/";
+    }
+
     $http.get('/api/v1/group/'+ $routeParams.groupId +'/').success(function(data) {
         $scope.group = data.data;
     });
 
     $scope.submit = function() {
         $http.delete('/api/v1/group/'+$routeParams.groupId+'/', $scope.group).success(function(data) {
-                $location.path('/groups').replace();
-            });
+            if($scope.depId != false){
+                $location.path('departments/'+$scope.group.department).replace();
+            } else {
+                $location.path('groups/').replace();
+            }
+        });
 
     };
 });

@@ -15,7 +15,7 @@
                 <div class="form-group">
                     <label for="name-group" class="col-sm-4 control-label">Name group</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="name-group" placeholder="Name group" ng-model="group.name">
+                        <input type="text" class="form-control" id="name-group" placeholder="Name group" ng-model="group.name" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -39,19 +39,19 @@
                 <div class="form-group">
                     <label for="fio" class="col-sm-4 control-label">FIO student</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="fio" placeholder="FIO student" ng-model="student.fio">
+                        <input type="text" class="form-control" id="fio" placeholder="FIO student" ng-model="student.fio" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="birthday" class="col-sm-4 control-label">Birthday</label>
                     <div class="col-sm-8">
-                        <input type="date" class="form-control" id="birthday" placeholder="yyyy-MM-dd" ng-model="student.birthday">
+                        <input type="date" class="form-control" id="birthday" placeholder="yyyy-MM-dd" ng-model="student.birthday" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="numberCart" class="col-sm-4 control-label">Number student cart</label>
                     <div class="col-sm-8">
-                        <input type="number" class="form-control" id="numberCart" placeholder="Number student cart:" ng-model="student.number_student_cart">
+                        <input type="number" class="form-control" id="numberCart" placeholder="Number student cart:" ng-model="student.number_student_cart" required>
                     </div>
                 </div>
 
@@ -64,5 +64,4 @@
             </form>
         </div>
     </div>
-    {{ st | json }}
 </div>

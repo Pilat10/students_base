@@ -22,7 +22,7 @@
                     <td>{{ group.headman_name }}</td>
                     <td>
                         <button type="button" class="btn btn-info" ng-click="editButton(group.id)">Edit</button>
-                        <button type="button" class="btn btn-danger" ng-click="deleteButton(group.id)">Edit</button>
+                        <button type="button" class="btn btn-danger" ng-click="deleteButton(group.id)">Delete</button>
                         <!--
                         <a href="group/edit/{{ group.id }}" class="btn btn-info">Edit</a>
                         <a href="group/delete/{{ group.id }}" class="btn btn-danger">Delete</a>
@@ -36,5 +36,4 @@
         <button type="button" class="btn btn-success btn-block btn-lg" ng-click="addButton()">Add group</button>
         <a href="departments/" class="btn btn-primary btn-block btn-lg" ng-show="back_button">Back</a>
     </div>
-    {{ depId }}
 </div>
