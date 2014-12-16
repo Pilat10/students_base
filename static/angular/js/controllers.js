@@ -31,18 +31,15 @@ angularControllers.controller('HomeCtrl', function($scope, $http, $location, Log
 angularControllers.controller('LoginCtrl', function($scope, LoginService, $location){
 
     LoginService.isLogged().success(function(data){
-        //$scope.loginn = data;
         $location.path('/').replace();
     }).error(function(data){
         $scope.loginn = data;
     });
     $scope.submit = function(){
         LoginService.login($scope.user).success(function(data){
-            //$scope.log_suc = data;
             $location.path('/').replace();
         }).error(function(data){
             $scope.error_data = true;
-            //$scope.log_err = data;
             $scope.user = {
                 username: "",
                 password: ""
@@ -223,7 +220,7 @@ angularControllers.controller('GroupAdd', function($scope, $http, $location, Log
         $scope.backUrl = "groups/";
     }
 
-    $http.get('/api/v1/department').success(function(data){
+    $http.get('/api/v1/department/').success(function(data){
         $scope.departments = data.data;
     });
 
@@ -246,7 +243,7 @@ angularControllers.controller('GroupAdd', function($scope, $http, $location, Log
 
                 $http.post('/api/v1/student/', student).success(function(data){
                     group.headman = data.data.id;
-                    $http.put('/api/v1/group/'+student.group, group)
+                    $http.put('/api/v1/group/'+student.group+'/', group)
                     .success(function(data) {
                         if($scope.depId != false){
                             $location.path('departments/'+group.department).replace();
@@ -285,7 +282,7 @@ angularControllers.controller('GroupEdit', function($scope, $http, $location, $r
                 }
             }
         })
-        $http.get('/api/v1/department').success(function(data){
+        $http.get('/api/v1/department/').success(function(data){
             $scope.departments = data.data;
             for(var i = 0; i < $scope.departments.length; i++){
                 if($scope.departments[i].id == $scope.group.department){
@@ -304,7 +301,7 @@ angularControllers.controller('GroupEdit', function($scope, $http, $location, $r
             }
             $scope.group.department = $scope.group.department.id;
 
-            $http.put('/api/v1/group/'+$routeParams.groupId, $scope.group)
+            $http.put('/api/v1/group/'+$routeParams.groupId+'/', $scope.group)
             .success(function(data) {
                 if($scope.depId != false){
                     $location.path('departments/'+$scope.group.department).replace();
@@ -507,7 +504,7 @@ angularControllers.controller('StudentDelete', function($scope, $http, $location
     $scope.submit = function() {
         $http.delete('/api/v1/student/'+$routeParams.studentId+'/', $scope.student).success(function(data) {
             if($scope.groupIdMain != false){
-                $location.path('/groups/'+$scope.student.group.id).replace();
+                $location.path('/groups/'+$scope.student.group).replace();
             } else {
                 $location.path('/students/').replace();
             }

@@ -86,9 +86,9 @@ StudentBaseApp.config(function($routeProvider, $locationProvider) {
         templateUrl: vars.static_teampleate + 'student_delete.html',
         controller: 'StudentDelete'
     })
-//    .otherwise({
-//        redirectTo:'/departments'
-//    });
+    .otherwise({
+        redirectTo:'/'
+    });
 
     $locationProvider.html5Mode(true);
 });

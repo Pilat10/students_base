@@ -11,7 +11,7 @@
     </div>
     <div class="row">
         <div class="col-sm-6 col-sm-offset-3">
-            <form class="form-horizontal" role="form">
+            <form name="groupForm" class="form-horizontal" role="form">
                 <div class="form-group">
                     <label for="name-group" class="col-sm-4 control-label">Name group</label>
                     <div class="col-sm-8">
@@ -33,7 +33,7 @@
 
                 <div class="form-group">
                     <div class="col-sm-12">
-                        <button type="submit" class="btn btn-success btn-block" ng-click="submit()">Edit group</button>
+                        <button ng-disabled="groupForm.$invalid" type="submit" class="btn btn-success btn-block" ng-click="submit()">Edit group</button>
                         <a href="{{ backUrl }}" class="btn btn-primary btn-block">Back</a>
                     </div>
                 </div>
