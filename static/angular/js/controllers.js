@@ -9,8 +9,12 @@ angularControllers.controller('MainController', function($scope, $route, $routeP
     $scope.$location = $location;
     $scope.$routeParams = $routeParams;
     $scope.depId = 1;
+    $scope.groupIdMain = 2;
     $scope.setDepId = function(depId) {
         $scope.depId = depId;
+    };
+    $scope.setGroupId = function(groupIdMain) {
+        $scope.groupIdMain = groupIdMain;
     };
 });
 
@@ -83,26 +87,6 @@ angularControllers.controller('DepartmentListCtrl', function($scope, $http, $loc
             $scope.notLoggedMsg = true;
         }
     };
-});
-
-angularControllers.controller('GroupDepartmentListCtrl', function($scope, $http, $routeParams, LoginService) {
-    LoginService.isLogged().success(function(data){
-        $scope.user = data.data.user;
-        $scope.logged = true;
-    }).error(function() {
-        $scope.logged = false;
-    });
-    $http.get('/api/v1/group/?department_id='+$routeParams.departmentId)
-    .success(function(data) {
-        $scope.groups = data;
-        $scope.show_group=false;
-        if (data.status == "success"){
-            $scope.show_group=true;
-        }
-        $scope.static = vars.static;
-        $scope.department_id = $routeParams.departmentId;
-    });
-    $scope.back_button = true;
 });
 
 angularControllers.controller('DepartmentAddCtrl', function($scope, $http, $location, LoginService) {
@@ -222,19 +206,6 @@ angularControllers.controller('GroupList', function($scope, $http, $routeParams,
             $scope.notLoggedMsg = true;
         }
     };
-});
-
-angularControllers.controller('StudentList', function($scope, $http, $routeParams) {
-    $http.get('/api/v1/student/?group_id='+$routeParams.groupId)
-        .success(function(data) {
-            $scope.students = data;
-            $scope.show_students=false;
-            if (data.status == "success"){
-                $scope.show_students=true;
-            }
-            $scope.static = vars.static;
-            $scope.group_id = $routeParams.groupId
-    })
 });
 
 angularControllers.controller('GroupAdd', function($scope, $http, $location, LoginService) {
@@ -371,6 +342,63 @@ angularControllers.controller('GroupDelete', function($scope, $http, $location, 
             }
         });
 
+    };
+});
+
+angularControllers.controller('StudentList', function($scope, $http, $routeParams, $location, LoginService) {
+    LoginService.isLogged().success(function(data){
+        $scope.user = data.data.user;
+        $scope.logged = true;
+    }).error(function() {
+        $scope.logged = false;
+    });
+
+    if($scope.depId != false){
+        $scope.backUrl = "departments/"+$scope.depId;
+    } else {
+        $scope.backUrl = "groups/";
+    }
+
+    var dep_url_get = '';
+    if($routeParams.groupId){
+        $scope.back_button = true;
+        dep_url_get = '?group_id='+$routeParams.groupId;
+        $scope.setDepId($routeParams.groupId);
+    } else {
+        $scope.setDepId(false);
+    }
+
+    $http.get('/api/v1/student/'+dep_url_get)
+        .success(function(data) {
+            $scope.students = data;
+            $scope.show_students=false;
+            if (data.status == "success"){
+                $scope.show_students=true;
+            }
+            $scope.static = vars.static;
+            $scope.group_id = $routeParams.groupId
+    });
+
+    $scope.addButton = function(){
+        if($scope.logged){
+            $location.path('student/add').replace();
+        } else {
+            $scope.notLoggedMsg = true;
+        }
+    };
+    $scope.editButton = function(dep_id){
+        if($scope.logged){
+            $location.path('student/edit/'+dep_id+'/').replace();
+        } else {
+            $scope.notLoggedMsg = true;
+        }
+    };
+    $scope.deleteButton = function(dep_id){
+        if($scope.logged){
+            $location.path('student/delete/'+dep_id+'/').replace();
+        } else {
+            $scope.notLoggedMsg = true;
+        }
     };
 });
 

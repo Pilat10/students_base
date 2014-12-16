@@ -70,7 +70,11 @@ StudentBaseApp.config(function($routeProvider, $locationProvider) {
         templateUrl: vars.static_teampleate + 'group_delete.html',
         controller: 'GroupDelete'
     })
-    .when('/student_add', {
+    .when('/students', {
+        templateUrl: vars.static_teampleate + 'student_list.html',
+        controller: 'StudentList'
+    })
+    .when('/student/add', {
         templateUrl: vars.static_teampleate + 'student_add.html',
         controller: 'StudentAdd'
     })

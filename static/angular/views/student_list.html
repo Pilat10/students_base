@@ -1,34 +1,42 @@
-<p>student list</p>
-<p>{{ students.status }}</p>
-<div ng-if="show_students">
-    <table>
-        <thead>
-            <tr>
-                <th colspan="4">Student list</th>
-            </tr>
-            <tr>
-                <th>Student fio</th>
-                <th>Student birthday</th>
-                <th>Student number cart</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="student in students.data">
-                <td>{{ student.fio }}</td>
-                <td>{{ student.birthday }}</td>
-                <td>{{ student.number_student_cart }}</td>
-                <td>
-                    <a href="student/edit/{{ student.id }}">
-                        <img src="{{ static + 'imeg/edit.png'}} ">
-                    </a>
-                    <a href="student/delete/{{ student.id }}">
-                        <img src="{{ static + 'imeg/delete.png' }}">
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+<div navbar></div>
+<div class="container theme-showcase" >
+    <div ng-if="show_students">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center" colspan="4">Student list</th>
+                </tr>
+                <tr>
+                    <th>Student fio</th>
+                    <th>Student birthday</th>
+                    <th>Student number cart</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="student in students.data">
+                    <td>{{ student.fio }}</td>
+                    <td>{{ student.birthday }}</td>
+                    <td>{{ student.number_student_cart }}</td>
+                    <td>
+                        <button type="button" class="btn btn-info" ng-click="editButton(student.id)">Edit</button>
+                        <button type="button" class="btn btn-danger" ng-click="deleteButton(student.id)">Delete</button>
+                        <!--
+                        <a href="student/edit/{{ student.id }}"><img src="{{ static + 'imeg/edit.png'}} "></a>
+                        <a href="student/delete/{{ student.id }}"><img src="{{ static + 'imeg/delete.png' }}"></a>
+                        -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <p class="alert alert-danger text-center" ng-show="notLoggedMsg">You are not logged in!!! Please log in.</p>
+    <button type="button" class="btn btn-success btn-block btn-lg" ng-click="addButton()">Add student</button>
+    <a href="{{ backUrl }}" class="btn btn-primary btn-block btn-lg" ng-show="back_button">Back</a>
+
+
+    <a href="student/add?group_id={{ group_id }}">Add new student</a>
+    <a href="groups/">Back</a>
+
+
 </div>
-<a href="student_add?group_id={{ group_id }}">Add new student</a>
-<a href="groups/">Back</a>
