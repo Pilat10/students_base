@@ -5,11 +5,12 @@
 var angularControllers = angular.module('angularControllers', []);
 
 angularControllers.controller('MainController', function($scope, $route, $routeParams, $location, LoginService) {
+    $scope.test = false;
     $scope.$route = $route;
     $scope.$location = $location;
     $scope.$routeParams = $routeParams;
-    $scope.depId = 1;
-    $scope.groupIdMain = 2;
+    $scope.depId = '';
+    $scope.groupIdMain = '';
     $scope.setDepId = function(depId) {
         $scope.depId = depId;
     };
@@ -363,9 +364,9 @@ angularControllers.controller('StudentList', function($scope, $http, $routeParam
     if($routeParams.groupId){
         $scope.back_button = true;
         dep_url_get = '?group_id='+$routeParams.groupId;
-        $scope.setDepId($routeParams.groupId);
+        $scope.setGroupId($routeParams.groupId);
     } else {
-        $scope.setDepId(false);
+        $scope.setGroupId(false);
     }
 
     $http.get('/api/v1/student/'+dep_url_get)
@@ -410,6 +411,12 @@ angularControllers.controller('StudentAdd', function($scope, $http, $location, $
         $scope.logged = false;
     });
 
+    if($scope.groupIdMain != false){
+        $scope.backUrl = "groups/"+$scope.groupIdMain;
+    } else {
+        $scope.backUrl = "students/";
+    }
+
     $http.get('/api/v1/group/').success(function(data){
         $scope.groups = data.data;
     });
@@ -424,12 +431,29 @@ angularControllers.controller('StudentAdd', function($scope, $http, $location, $
             group: $scope.student.group.id
         };
         $http.post('/api/v1/student/', student).success(function(data){
-            $location.path('/groups/'+$scope.student.group.id).replace();
+            if($scope.groupIdMain != false){
+                $location.path('/groups/'+$scope.student.group.id).replace();
+            } else {
+                $location.path('/students/').replace();
+            }
         });
     };
 });
 
-angularControllers.controller('StudentEdit', function($scope, $http, $location, $routeParams) {
+angularControllers.controller('StudentEdit', function($scope, $http, $location, $routeParams, LoginService) {
+    LoginService.isLogged().success(function(data){
+        $scope.user = data.data.user;
+        $scope.logged = true;
+    }).error(function() {
+        $scope.logged = false;
+    });
+
+    if($scope.groupIdMain != false){
+        $scope.backUrl = "groups/"+$scope.groupIdMain;
+    } else {
+        $scope.backUrl = "students/";
+    }
+
     $http.get('/api/v1/student/'+ $routeParams.studentId +'/').success(function(data) {
         $scope.student = data.data;
         $scope.student.birthday = new Date($scope.student.birthday);
@@ -440,7 +464,7 @@ angularControllers.controller('StudentEdit', function($scope, $http, $location, 
                     $scope.student.group = $scope.groups[i];
                 }
             }
-        })
+        });
     });
 
     $scope.submit = function() {
@@ -453,19 +477,40 @@ angularControllers.controller('StudentEdit', function($scope, $http, $location, 
         };
         $http.put('/api/v1/student/'+$routeParams.studentId, student)
         .success(function(data) {
-            $location.path('/groups/'+$scope.student.group.id).replace();
+            if($scope.groupIdMain != false){
+                $location.path('/groups/'+$scope.student.group.id).replace();
+            } else {
+                $location.path('/students/').replace();
+            }
         });
     };
 });
 
-angularControllers.controller('StudentDelete', function($scope, $http, $location, $routeParams) {
+angularControllers.controller('StudentDelete', function($scope, $http, $location, $routeParams, LoginService) {
+    LoginService.isLogged().success(function(data){
+        $scope.user = data.data.user;
+        $scope.logged = true;
+    }).error(function() {
+        $scope.logged = false;
+    });
+
+    if($scope.groupIdMain != false){
+        $scope.backUrl = "groups/"+$scope.groupIdMain;
+    } else {
+        $scope.backUrl = "students/";
+    }
+
     $http.get('/api/v1/student/'+ $routeParams.studentId +'/').success(function(data) {
         $scope.student = data.data;
     });
 
     $scope.submit = function() {
         $http.delete('/api/v1/student/'+$routeParams.studentId+'/', $scope.student).success(function(data) {
-            $location.path('/groups/'+$scope.student.group).replace();
+            if($scope.groupIdMain != false){
+                $location.path('/groups/'+$scope.student.group.id).replace();
+            } else {
+                $location.path('/students/').replace();
+            }
         });
 
     };

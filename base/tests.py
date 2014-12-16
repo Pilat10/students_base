@@ -1,5 +1,5 @@
 from django.test import TestCase
-from base.models import Group, Student
+from base.models import Group, Student, Department
 from django.contrib.auth.models import User
 
 # Create your tests here.
@@ -23,6 +23,7 @@ class MyTestCase(TestCase):
         """
         test add group
         """
+        #Department.objects.create
         self.client.login(username='admin', password='admin')
         group_name = 'group 1'
         self.client.post('/groups/add/', {'name': group_name})
@@ -34,7 +35,7 @@ class MyTestCase(TestCase):
         """
         self.client.login(username='admin', password='admin')
         group_name = 'group 1'
-        self.client.post('/groups/add/', {'name': group_name})
+        self.client.post('/groups/add/', {'name': group_name, 'department': 1})
         group = Group.objects.get(name=group_name)
         self.client.post('/student/add/', {
             'fio': 'Anton',

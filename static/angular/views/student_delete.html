@@ -1,7 +1,22 @@
-<p>student_delete</p>
-
-<form ng-submit="submit()">
-    <p>Are you sure you want to delete: {{ student.fio }}?</p>
-    <input type="submit" id="submit" value="Delete" />
-</form>
-<a href="groups/{{ student.group }}">Back</a>
+<div navbar></div>
+<div class="container theme-showcase" >
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+            <p class="alert alert-warning">
+                Are you sure you want to delete: {{ student.fio }}?
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <button type="submit" class="btn btn-success btn-block" ng-click="submit()">Delete student</button>
+                        <a href="{{ backUrl }}" class="btn btn-primary btn-block">Back</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
