@@ -220,15 +220,25 @@ angularControllers.controller('GroupAdd', function($scope, $http, $location, Log
         $scope.backUrl = "groups/";
     }
 
+    $scope.group = '';
+
     $http.get('/api/v1/department/').success(function(data){
         $scope.departments = data.data;
+        for(var i = 0; i < $scope.departments.length; i++){
+            if($scope.departments[i].id == $scope.depId){
+                $scope.department = $scope.departments[i];
+                //$scope.department = $scope.departments[i];
+                var dfdsafa = 0;
+            }
+        }
     });
+
 
     $scope.submit = function() {
         if ($scope.group.name) {
             var group = {
                 "name": $scope.group.name,
-                "department": $scope.group.department.id,
+                "department": $scope.department.id,
                 "headman": ''
             };
             var date = $scope.student.birthday;
@@ -281,7 +291,7 @@ angularControllers.controller('GroupEdit', function($scope, $http, $location, $r
                     $scope.group.headman = $scope.students[i];
                 }
             }
-        })
+        });
         $http.get('/api/v1/department/').success(function(data){
             $scope.departments = data.data;
             for(var i = 0; i < $scope.departments.length; i++){
@@ -416,6 +426,11 @@ angularControllers.controller('StudentAdd', function($scope, $http, $location, $
 
     $http.get('/api/v1/group/').success(function(data){
         $scope.groups = data.data;
+        for(var i = 0; i<$scope.groups.length; i++){
+            if($scope.groups[i].id == $scope.groupIdMain){
+                $scope.group = $scope.groups[i];
+            }
+        }
     });
 
     $scope.group_id = $routeParams.group_id;
@@ -425,11 +440,11 @@ angularControllers.controller('StudentAdd', function($scope, $http, $location, $
             fio: $scope.student.fio,
             birthday: date.getFullYear().toString()+'-'+(date.getMonth()+1).toString()+'-'+date.getDate().toString(),
             number_student_cart: $scope.student.number_student_cart,
-            group: $scope.student.group.id
+            group: $scope.group.id
         };
         $http.post('/api/v1/student/', student).success(function(data){
             if($scope.groupIdMain != false){
-                $location.path('/groups/'+$scope.student.group.id).replace();
+                $location.path('/groups/'+student.group).replace();
             } else {
                 $location.path('/students/').replace();
             }
@@ -451,7 +466,7 @@ angularControllers.controller('StudentEdit', function($scope, $http, $location, 
         $scope.backUrl = "students/";
     }
 
-    $http.get('/api/v1/student/'+ $routeParams.studentId +'/').success(function(data) {
+    $http.get('/api/v1/student/'+ $routeParams.studentId + '/').success(function(data) {
         $scope.student = data.data;
         $scope.student.birthday = new Date($scope.student.birthday);
         $http.get('/api/v1/group/').success(function(data) {
@@ -472,7 +487,7 @@ angularControllers.controller('StudentEdit', function($scope, $http, $location, 
             number_student_cart: $scope.student.number_student_cart,
             group: $scope.student.group.id
         };
-        $http.put('/api/v1/student/'+$routeParams.studentId, student)
+        $http.put('/api/v1/student/'+$routeParams.studentId + '/', student)
         .success(function(data) {
             if($scope.groupIdMain != false){
                 $location.path('/groups/'+$scope.student.group.id).replace();
