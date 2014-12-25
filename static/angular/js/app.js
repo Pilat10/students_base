@@ -6,6 +6,7 @@ vars = {
 var StudentBaseApp = angular.module('angularApp', [
     'ngRoute',
     'angularControllers',
+    'angularDirectives',
     'angularServices',
 ]);
 
@@ -91,10 +92,4 @@ StudentBaseApp.config(function($routeProvider, $locationProvider) {
     });
 
     $locationProvider.html5Mode(true);
-});
-
-StudentBaseApp.directive('navbar', function() {
-    return {
-        templateUrl: vars.static_teampleate + 'navigation_bar.html'
-    };
 });
