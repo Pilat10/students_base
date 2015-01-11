@@ -28,7 +28,7 @@ class DepartmentSerializer(serializers.ModelSerializer):
             count_year = 0
             for student in students:
                 count_year += self.get_age(student.birthday)
-            return float(count_year)/float(count_student)
+            return int(float(count_year)/float(count_student))
         else:
             return 0
 
