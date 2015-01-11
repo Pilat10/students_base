@@ -2,6 +2,7 @@ from rest_framework import serializers
 from base.models import Student, Group, Department
 from django.contrib.auth.models import User
 from datetime import date
+from django.db.models import Count
 
 
 class DepartmentSerializer(serializers.ModelSerializer):
@@ -16,21 +17,17 @@ class DepartmentSerializer(serializers.ModelSerializer):
         return obj.group_set.count()
 
     def count_student_fun(self, obj):
-        groups = obj.group_set.all()
-        count_student = 0
-        for group in groups:
-            count_student += group.student_set.count()
-        return count_student
+        count_student = Department.objects.annotate(
+            count_stud=Count('group__student')).get(pk=obj.pk)
+        return count_student.count_stud
 
     def avg_age_fun(self, obj):
         count_student = self.count_student_fun(obj)
         if count_student:
-            groups = obj.group_set.all()
+            students = Student.objects.filter(group__department__pk=obj.pk)
             count_year = 0
-            for group in groups:
-                students = group.student_set.all()
-                for student in students:
-                    count_year += self.get_age(student.birthday)
+            for student in students:
+                count_year += self.get_age(student.birthday)
             return float(count_year)/float(count_student)
         else:
             return 0
