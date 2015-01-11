@@ -9,6 +9,8 @@ angularServices.factory('LoginService', ['$http', function($http) {
         apiBase: '/api/v1/auth/',
         http: $http,
         userService: "userService",
+        userLogged: '',
+        isLoggedd: false,
         isLogged: function(){
             return this.http.get(this.apiBase);
         },

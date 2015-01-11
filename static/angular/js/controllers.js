@@ -5,7 +5,17 @@
 var angularControllers = angular.module('angularControllers', []);
 
 angularControllers.controller('MainController', function($scope, $route, $routeParams, $location, LoginService) {
-    $scope.test = false;
+    LoginService.isLogged().success(function(data){
+        LoginService.userLogged = data.data.user;
+        LoginService.isLoggedd = true;
+        $scope.user = data.data.user;
+        $scope.logged = true;
+        //$location.path('/').replace();
+    }).error(function(data){
+        $scope.loginn = data;
+    });
+
+    $scope.test = true;
     $scope.$route = $route;
     $scope.$location = $location;
     $scope.$routeParams = $routeParams;
@@ -20,23 +30,33 @@ angularControllers.controller('MainController', function($scope, $route, $routeP
 });
 
 angularControllers.controller('HomeCtrl', function($scope, $http, $location, LoginService) {
-    LoginService.isLogged().success(function(data){
+    if (LoginService.isLoggedd){
+        $scope.user = LoginService.userLogged;
+        $scope.logged = true;
+    } else {
+        $scope.logged = false;
+    }
+    /*LoginService.isLogged().success(function(data){
         $scope.user = data.data.user;
         $scope.logged = true;
     }).error(function() {
         $scope.logged = false;
-    });
+    });*/
 });
 
 angularControllers.controller('LoginCtrl', function($scope, LoginService, $location){
 
     LoginService.isLogged().success(function(data){
+        LoginService.userLogged = data.data.user;
+        LoginService.isLoggedd = true;
         $location.path('/').replace();
     }).error(function(data){
         $scope.loginn = data;
     });
     $scope.submit = function(){
         LoginService.login($scope.user).success(function(data){
+            LoginService.userLogged = data.data.user.username;
+            LoginService.isLoggedd = true;
             $location.path('/').replace();
         }).error(function(data){
             $scope.error_data = true;
@@ -50,17 +70,18 @@ angularControllers.controller('LoginCtrl', function($scope, LoginService, $locat
 
 angularControllers.controller('LogoutCtrl', function($scope, LoginService, $location){
    LoginService.logout().success(function(){
+       LoginService.isLoggedd = false;
        $location.path('/').replace();
    })
 });
 
 angularControllers.controller('DepartmentListCtrl', function($scope, $http, $location, LoginService) {
-    LoginService.isLogged().success(function(data){
-        $scope.user = data.data.user;
+    if (LoginService.isLoggedd){
+        $scope.user = LoginService.userLogged;
         $scope.logged = true;
-    }).error(function() {
+    } else {
         $scope.logged = false;
-    });
+    }
     $http.get('/api/v1/department/').success(function(data){
         $scope.departments = data;
     });
