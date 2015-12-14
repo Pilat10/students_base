@@ -14,4 +14,5 @@ urlpatterns = patterns('api.views',
         name='studets-detail'),
     url(r'^docs/', include('rest_framework_swagger.urls')),
     url(r'^auth/', views.LoginView.as_view(), name="auth"),
+    url(r'^auth-token/', views.LoginTokenView.as_view(), name="auth"),
 )

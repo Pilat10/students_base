@@ -42,6 +42,7 @@ PROJECT_APPS = (
     'base',
     'rest_framework',
     'rest_framework_swagger',
+    'rest_framework.authtoken'
 )
 
 INSTALLED_APPS += PROJECT_APPS
@@ -93,11 +94,13 @@ AUTHENTICATION_BACKENDS = (
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-        #'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        'rest_framework.permissions.IsAuthenticated',
     )
 
 }

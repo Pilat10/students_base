@@ -6,9 +6,12 @@ from rest_framework.status import HTTP_401_UNAUTHORIZED
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import AnonymousUser
 from base.models import Group, Student, Department
-from api.mixins import ResponseDataWrapperMixin
-from rest_framework.authentication import SessionAuthentication
+from api.mixins import ResponseDataWrapperMixin, \
+    ResponseDataWrapperMixinSuccess
+# from rest_framework.authentication import SessionAuthentication, \
+# TokenAuthentication
 from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
 
 
 class DepartmentListView(ResponseDataWrapperMixin, generics.ListCreateAPIView):
@@ -95,7 +98,7 @@ class LoginView(ResponseDataWrapperMixin, APIView):
         }
     </pre>
     """
-    authentication_classes = (SessionAuthentication, )
+    # authentication_classes = (SessionAuthentication, )
     permission_classes = ()
 
     def credentials(self, request):
@@ -105,7 +108,6 @@ class LoginView(ResponseDataWrapperMixin, APIView):
         if user:
             return user
         return None
-
 
     def post(self, request):
         #username = request.DATA.get("username")
@@ -117,6 +119,52 @@ class LoginView(ResponseDataWrapperMixin, APIView):
         return Response(
             {"user": UserSerializer(user, context={"request": request}).data})
 
+    def get(self, request, format=None):
+        content = {
+            'user': unicode(request.user),
+            'auth': unicode(request.auth),
+        }
+        if (request.user == AnonymousUser()):
+            return Response(content, HTTP_401_UNAUTHORIZED)
+        return Response(content)
+
+    def delete(self, request):
+        logout(request)
+        return Response({})
+
+
+class LoginTokenView(ResponseDataWrapperMixinSuccess, APIView):
+    """
+    <pre>
+        {
+         "username": "admin",
+         "password": "admin"
+        }
+    </pre>
+    """
+    authentication_classes = ()
+    permission_classes = ()
+
+    def credentials(self, request):
+        username = request.DATA.get("username")
+        password = request.DATA.get("password")
+        user = authenticate(username=username, password=password)
+        if user:
+            return user
+        return None
+
+    def post(self, request):
+        user = self.credentials(request)
+        if not user:
+            return Response(
+                {"error": "wrong username or password"}, HTTP_401_UNAUTHORIZED)
+        token = Token.objects.create(user)
+        # login(request, user)
+        return Response(
+            {
+                "token": token.key,
+                "user": UserSerializer(user, context={"request": request}).data
+            })
 
     def get(self, request, format=None):
         content = {

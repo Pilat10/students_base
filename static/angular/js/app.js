@@ -86,10 +86,10 @@ StudentBaseApp.config(function($routeProvider, $locationProvider) {
     .when('/student/delete/:studentId', {
         templateUrl: vars.static_teampleate + 'student_delete.html',
         controller: 'StudentDelete'
-    })
-    .otherwise({
-        redirectTo:'/'
     });
+    //.otherwise({
+    //    redirectTo:'/'
+    //});
 
     $locationProvider.html5Mode(true);
 });
