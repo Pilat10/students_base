@@ -70,11 +70,14 @@ class StudentListView(ResponseDataWrapperMixin, generics.ListCreateAPIView):
     serializer_class = StudentSerializer
 
     def get_queryset(self):
+        queryset = super().get_queryset()
         group_id = self.request.query_params.get('group_id', None)
         if group_id is not None:
-            return super().get_queryset().filter(
-                group__pk=group_id)
-        return super().get_queryset()
+            queryset = queryset.filter(group__pk=group_id)
+        department_id = self.request.query_params.get('department_id', None)
+        if department_id is not None:
+            queryset = queryset.filter(group__department__pk=department_id)
+        return queryset
 
 
 class StudentDetailView(ResponseDataWrapperMixin,
