@@ -1,6 +1,5 @@
 from django.contrib import admin
-from base.models import Student, Group, Department
-from base.signal_models import LogEntry
+from base.models import Student, Group, Department, LogEntry
 from base.forms import GroupForm
 
 # Register your models here.

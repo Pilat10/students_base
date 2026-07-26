@@ -1,44 +1,43 @@
-from django.conf.urls import patterns, include, url
-from django.views.generic import TemplateView
-from base.views import *
 from django.contrib import admin
-from api import urls as api_urls
-admin.autodiscover()
+from django.contrib.auth import views as auth_views
+from django.urls import include, path, re_path
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.generic import TemplateView
 
-urlpatterns = patterns('',
-    url(r'^admin/', include(admin.site.urls)),
+from base import views as base_views
 
+urlpatterns = [
+    path('admin/', admin.site.urls),
 
+    path('api/v1/', include('api.urls', namespace='api')),
+    path('ang/api-auth/', include('rest_framework.urls')),
 
-    url(r'^api/v1/', include(api_urls, namespace='api')),
+    path('groups/', base_views.GroupList.as_view(), name='group_list'),
+    path('groups/add/', base_views.GroupAdd.as_view(), name='group_add'),
+    path('groups/edit/<int:group_id>/', base_views.GroupEdit.as_view(),
+         name='group_edit'),
+    path('groups/delete/<int:group_id>/', base_views.GroupDelete.as_view(),
+         name='group_delete'),
+    path('groups/<int:group_id>/', base_views.StudentList.as_view(),
+         name='student_list'),
 
+    path('student/add/', base_views.StudentAdd.as_view(), name='student_add'),
+    path('student/edit/<int:student_id>/', base_views.StudentEdit.as_view(),
+         name='student_edit'),
+    path('student/delete/<int:student_id>/',
+         base_views.StudentDelete.as_view(), name='student_delete'),
 
-    url(r'^groups/$', GroupList.as_view(), name='group_list'),
-    url(r'^groups/(?P<group_id>\d+)/$', StudentList.as_view(),
-        name='student_list'),
-    url(r'^groups/add/$', GroupAdd.as_view(), name='group_add'),
-    url(r'^groups/edit/(?P<group_id>\d+)/$', GroupEdit.as_view(),
-        name='group_edit'),
-    url(r'^groups/delete/(?P<group_id>\d+)/$', GroupDelete.as_view(),
-        name='group_delete'),
+    path('login/', auth_views.LoginView.as_view(
+        template_name='registration/login.html'), name='login'),
+    path('login_email/', auth_views.LoginView.as_view(
+        template_name='registration/login_email.html'), name='login_email'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='group_list'),
+         name='logout'),
 
-    url(r'^student/add/$', StudentAdd.as_view(), name='student_add'),
-    url(r'^student/edit/(?P<student_id>\d+)/$', StudentEdit.as_view(),
-        name='student_edit'),
-    url(r'^student/delete/(?P<student_id>\d+)/$', StudentDelete.as_view(),
-        name='student_delete'),
-
-    url(r'^login/$', 'django.contrib.auth.views.login',
-        {'template_name': 'registration/login.html',
-         'redirect_field_name': 'groups/'}, name='login'),
-    url(r'^login_email/$', 'django.contrib.auth.views.login',
-        {'template_name': 'registration/login_email.html',
-         'redirect_field_name': 'groups/'}, name='login_email'),
-    url(r'^logout/$', 'django.contrib.auth.views.logout',
-        {'next_page': 'group_list'}, name='logout'),
-    url(r'^ang/api-auth/', include('rest_framework.urls',
-                               namespace='rest_framework')),
-    url(r'^docs/', include('rest_framework_swagger.urls')),
-    # url(r'^.*$', TemplateView.as_view(
-    #     template_name='index_angular.html')),
-)
+    # AngularJS SPA shell (html5Mode). ensure_csrf_cookie because every DRF
+    # APIView is csrf_exempt and index_angular.html has no {% csrf_token %},
+    # so nothing would ever set the csrftoken cookie the SPA needs to send
+    # as X-CSRFToken.
+    re_path(r'^app/', ensure_csrf_cookie(
+        TemplateView.as_view(template_name='index_angular.html'))),
+]

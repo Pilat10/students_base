@@ -4,12 +4,9 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.status import HTTP_401_UNAUTHORIZED
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import AnonymousUser
 from base.models import Group, Student, Department
 from api.mixins import ResponseDataWrapperMixin, \
     ResponseDataWrapperMixinSuccess
-# from rest_framework.authentication import SessionAuthentication, \
-# TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 
@@ -31,7 +28,7 @@ class DepartmentDetailView(ResponseDataWrapperMixin,
     """
 
     """
-    model = Department
+    queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
 
 
@@ -49,11 +46,11 @@ class GroupListView(ResponseDataWrapperMixin, generics.ListCreateAPIView):
     serializer_class = GroupSerializer
 
     def get_queryset(self):
-        department_id = self.request.QUERY_PARAMS.get('department_id', None)
+        department_id = self.request.query_params.get('department_id', None)
         if department_id is not None:
-            return super(GroupListView, self).get_queryset().filter(
+            return super().get_queryset().filter(
                 department__pk=department_id)
-        return super(GroupListView, self).get_queryset()
+        return super().get_queryset()
 
 
 class GroupDetailView(ResponseDataWrapperMixin,
@@ -61,7 +58,7 @@ class GroupDetailView(ResponseDataWrapperMixin,
     """
 
     """
-    model = Group
+    queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
 
@@ -73,11 +70,11 @@ class StudentListView(ResponseDataWrapperMixin, generics.ListCreateAPIView):
     serializer_class = StudentSerializer
 
     def get_queryset(self):
-        group_id = self.request.QUERY_PARAMS.get('group_id', None)
+        group_id = self.request.query_params.get('group_id', None)
         if group_id is not None:
-            return super(StudentListView, self).get_queryset().filter(
+            return super().get_queryset().filter(
                 group__pk=group_id)
-        return super(StudentListView, self).get_queryset()
+        return super().get_queryset()
 
 
 class StudentDetailView(ResponseDataWrapperMixin,
@@ -85,7 +82,7 @@ class StudentDetailView(ResponseDataWrapperMixin,
     """
 
     """
-    model = Student
+    queryset = Student.objects.all()
     serializer_class = StudentSerializer
 
 
@@ -98,19 +95,17 @@ class LoginView(ResponseDataWrapperMixin, APIView):
         }
     </pre>
     """
-    # authentication_classes = (SessionAuthentication, )
     permission_classes = ()
 
     def credentials(self, request):
-        username = request.DATA.get("username")
-        password = request.DATA.get("password")
-        user = authenticate(username=username, password=password)
+        username = request.data.get("username")
+        password = request.data.get("password")
+        user = authenticate(request, username=username, password=password)
         if user:
             return user
         return None
 
     def post(self, request):
-        #username = request.DATA.get("username")
         user = self.credentials(request)
         if not user:
             return Response(
@@ -121,10 +116,10 @@ class LoginView(ResponseDataWrapperMixin, APIView):
 
     def get(self, request, format=None):
         content = {
-            'user': unicode(request.user),
-            'auth': unicode(request.auth),
+            'user': str(request.user),
+            'auth': str(request.auth),
         }
-        if (request.user == AnonymousUser()):
+        if not request.user.is_authenticated:
             return Response(content, HTTP_401_UNAUTHORIZED)
         return Response(content)
 
@@ -146,9 +141,9 @@ class LoginTokenView(ResponseDataWrapperMixinSuccess, APIView):
     permission_classes = ()
 
     def credentials(self, request):
-        username = request.DATA.get("username")
-        password = request.DATA.get("password")
-        user = authenticate(username=username, password=password)
+        username = request.data.get("username")
+        password = request.data.get("password")
+        user = authenticate(request, username=username, password=password)
         if user:
             return user
         return None
@@ -158,8 +153,7 @@ class LoginTokenView(ResponseDataWrapperMixinSuccess, APIView):
         if not user:
             return Response(
                 {"error": "wrong username or password"}, HTTP_401_UNAUTHORIZED)
-        token = Token.objects.create(user)
-        # login(request, user)
+        token, _ = Token.objects.get_or_create(user=user)
         return Response(
             {
                 "token": token.key,
@@ -168,10 +162,10 @@ class LoginTokenView(ResponseDataWrapperMixinSuccess, APIView):
 
     def get(self, request, format=None):
         content = {
-            'user': unicode(request.user),
-            'auth': unicode(request.auth),
+            'user': str(request.user),
+            'auth': str(request.auth),
         }
-        if (request.user == AnonymousUser()):
+        if not request.user.is_authenticated:
             return Response(content, HTTP_401_UNAUTHORIZED)
         return Response(content)
 

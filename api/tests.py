@@ -1,10 +1,18 @@
+from datetime import date, timedelta
+
 from rest_framework.test import APITestCase
-from rest_framework.status import *
+from rest_framework.status import (
+    HTTP_200_OK,
+    HTTP_201_CREATED,
+    HTTP_204_NO_CONTENT,
+    HTTP_400_BAD_REQUEST,
+    HTTP_401_UNAUTHORIZED,
+    HTTP_404_NOT_FOUND,
+)
 from django.contrib.auth.models import User, Group as Group_auth, Permission
-from serializers import DepartmentSerializer
-from datetime import date
+from api.serializers import DepartmentSerializer
 from base.models import Department, Group, Student
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 SUCCESS_STATUS = 'success'
 FAIL_STATUS = 'fail'
@@ -242,9 +250,9 @@ class DepartmentTestCase(APITestCase):
         today = date.today()
         year = 1991
 
-        day_before = date(year=year, month=today.month, day=today.day-1)
-        day_today = date(year=year, month=today.month, day=today.day)
-        day_after = date(year=year, month=today.month, day=today.day+1)
+        day_today = date(year, 1, 1) + (today - date(today.year, 1, 1))
+        day_before = day_today - timedelta(days=1)
+        day_after = day_today + timedelta(days=1)
 
         age_full = today.year - year
         age_not_full = today.year - year - 1
@@ -399,7 +407,10 @@ class GroupTestCase(APITestCase):
         if group.headman is not None:
             headman = group.headman.id
         else:
-            headman = group.headman
+            # Django's multipart test-client encoder can't encode None;
+            # '' is the wire value the AngularJS SPA sends for "no headman"
+            # anyway (see EmptyStringAsNullPKField in api/serializers.py).
+            headman = ''
         group_new = {
             "id": group.id,
             "name": "",
@@ -427,3 +438,18 @@ class GroupTestCase(APITestCase):
         self.assertEqual(post.status_code, HTTP_204_NO_CONTENT)
         self.assertEqual(post.data.get("status"), SUCCESS_STATUS)
         self.assertEqual(Group.objects.count(), count_group-1)
+
+    def test_put_group_empty_headman_is_null(self):
+        """
+        The AngularJS SPA sends headman='' to mean "no headman" (DRF2
+        coerced '' -> None; DRF3's PrimaryKeyRelatedField needs help).
+        """
+        group = Group.objects.exclude(headman=None).first()
+        group_url = reverse('api:group-detail', kwargs={"pk": group.pk})
+        put = self.client.put(group_url, {
+            "name": group.name,
+            "department": group.department_id,
+            "headman": "",
+        }, format='json')
+        self.assertEqual(put.status_code, HTTP_200_OK)
+        self.assertIsNone(Group.objects.get(pk=group.pk).headman)

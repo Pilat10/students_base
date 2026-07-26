@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from base.models import Group
+from base.models import Group, Student
 
 
 class GroupForm(ModelForm):
@@ -8,8 +8,11 @@ class GroupForm(ModelForm):
     """
 
     def __init__(self, *args, **kwargs):
-        super(GroupForm, self).__init__(*args, **kwargs)
-        self.fields['headman'].queryset = self.instance.student_set.all()
+        super().__init__(*args, **kwargs)
+        if self.instance.pk:
+            self.fields['headman'].queryset = self.instance.student_set.all()
+        else:
+            self.fields['headman'].queryset = Student.objects.none()
 
     class Meta:
         model = Group

@@ -11,7 +11,7 @@ describe('Angular controllers', function(){
         beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
             $httpBackend = _$httpBackend_;
             $httpBackend.expectGET('/api/v1/auth/').respond({"status": "success", "data": {"user": "admin", "auth": "None"}});
-            $httpBackend.expectGET('/api/v1/department/').respond({"status": "success", "data": [{"id": 1, "name_department": "Dep 1", "count_group": 3, "count_student": 17, "avg_age": 3.0588235294117645}, {"id": 2, "name_department": "Dep 2", "count_group": 1, "count_student": 5, "avg_age": 22.0} ]});
+            $httpBackend.expectGET('/api/v1/department/').respond({"status": "success", "data": [{"id": 1, "name_department": "Dep 1", "count_group": 3, "count_student": 17, "avg_age": 3}, {"id": 2, "name_department": "Dep 2", "count_group": 1, "count_student": 5, "avg_age": 22} ]});
             scope = $rootScope.$new();
             ctrl = $controller('DepartmentListCtrl', {$scope: scope});
         }));
@@ -29,14 +29,14 @@ describe('Angular controllers', function(){
                         "name_department": "Dep 1",
                         "count_group": 3,
                         "count_student": 17,
-                        "avg_age": 3.0588235294117645
+                        "avg_age": 3
                     },
                     {
                         "id": 2,
                         "name_department": "Dep 2",
                         "count_group": 1,
                         "count_student": 5,
-                        "avg_age": 22.0
+                        "avg_age": 22
                     }
                 ]
             });

@@ -21,7 +21,7 @@
                         <td>{{ student.birthday }}</td>
                         <td>{{ student.number_student_cart }}</td>
                         <td>
-                            {% load staticfiles %}
+                            {% load static %}
                             <a href="{% url 'student_edit' student.pk %}">
                                 <img src="{% static 'imeg/edit.png' %}"></a>
                             <a href="{% url 'student_delete' student.pk %}">

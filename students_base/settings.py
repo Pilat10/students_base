@@ -22,40 +22,35 @@ SECRET_KEY = '^e9f14)#9#)zj0h$vndqygei$6ld*djk#6017z+8tuc^ijt7=6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-)
-
-PROJECT_APPS = (
-    'base',
+    'base.apps.BaseConfig',
+    'api',
     'rest_framework',
-    'rest_framework_swagger',
-    'rest_framework.authtoken'
-)
+    'rest_framework.authtoken',
+    'drf_spectacular',
+]
 
-INSTALLED_APPS += PROJECT_APPS
-
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'base.middleware.MyMiddleware',
-)
+    # 'base.middleware.QueryCountMiddleware',
+]
 
 ROOT_URLCONF = 'students_base.urls'
 
@@ -81,11 +76,13 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
-
 USE_TZ = True
 
-LOGIN_REDIRECT_URL = '/groups'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = '/groups/'
+LOGIN_URL = '/login/'
+LOGOUT_REDIRECT_URL = '/groups/'
 
 AUTHENTICATION_BACKENDS = (
     'base.auth.MyAuth',
@@ -94,48 +91,39 @@ AUTHENTICATION_BACKENDS = (
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
         'rest_framework.permissions.IsAuthenticated',
-    )
-
+    ),
+    # DO NOT add DEFAULT_PAGINATION_CLASS / PAGE_SIZE — the AngularJS SPA
+    # iterates `data.data` as a bare array (static/angular/views/*.html).
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-SWAGGER_SETTINGS = {
-    "exclude_namespaces": [],
-    "api_version": '1.0.0',
-    "api_path": "/",
-    "api_key": '',
-    "enabled_methods": ['get', 'post', 'put', 'patch', 'delete'],
-    "is_authenticated": False,
-    "is_superuser": False,
-    "permission_denied_handler": None,
-    "info": {
-        'contact': 'apiteam@wordnik.com',
-        'description': 'This is a sample server Petstore server. '
-                       'You can find out more about Swagger at '
-                       '<a href="http://swagger.wordnik.com">'
-                       'http://swagger.wordnik.com</a> '
-                       'or on irc.freenode.net, #swagger. '
-                       'For this sample, you can use the api key '
-                       '"special-key" to test '
-                       'the authorization filters',
-        'license': 'Apache 2.0',
-        'licenseUrl': 'http://www.apache.org/licenses/LICENSE-2.0.html',
-        'termsOfServiceUrl': 'http://helloreverb.com/terms/',
-        'title': 'Swagger Sample App',
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Students Base API',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SERVE_PERMISSIONS': ['rest_framework.permissions.AllowAny'],
+}
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'debug': DEBUG,
+            'context_processors': [
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
     },
-}
-
-import os.path
-
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates'),
-)
+]
 
 FIXTURE_DIRS = (os.path.join(BASE_DIR, 'fixtures'), )
 # Static files (CSS, JavaScript, Images)

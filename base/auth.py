@@ -1,26 +1,27 @@
-from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.backends import ModelBackend
 
 
-class MyAuth(object):
+class MyAuth(ModelBackend):
+    """
+    Authenticate by email address instead of username.
     """
 
-    """
-
-    def authenticate(self, username, password):
+    def authenticate(self, request, username=None, password=None, **kwargs):
+        user_model = get_user_model()
+        if username is None:
+            username = kwargs.get(user_model.USERNAME_FIELD)
+        if not username or password is None:
+            return None
         try:
-            user = get_user_model().objects.get(email=username)
-        except get_user_model().DoesNotExist:
+            user = user_model._default_manager.get(email__iexact=username)
+        except user_model.DoesNotExist:
+            # Run the password hasher once anyway, to mitigate a timing
+            # attack telling apart existing and non-existing emails.
+            user_model().set_password(password)
             return None
-        else:
-            if user.check_password(password):
-                return user
+        except user_model.MultipleObjectsReturned:
             return None
-
-    def get_user(self, user_id):
-        try:
-            return get_user_model().objects.get(pk=user_id)
-        except get_user_model().DoesNotExist:
-            return None
-
-
+        if user.check_password(password) and self.user_can_authenticate(user):
+            return user
+        return None
