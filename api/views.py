@@ -70,11 +70,14 @@ class StudentListView(ResponseDataWrapperMixin, generics.ListCreateAPIView):
     serializer_class = StudentSerializer
 
     def get_queryset(self):
+        queryset = super().get_queryset()
         group_id = self.request.query_params.get('group_id', None)
         if group_id is not None:
-            return super().get_queryset().filter(
-                group__pk=group_id)
-        return super().get_queryset()
+            queryset = queryset.filter(group__pk=group_id)
+        department_id = self.request.query_params.get('department_id', None)
+        if department_id is not None:
+            queryset = queryset.filter(group__department__pk=department_id)
+        return queryset
 
 
 class StudentDetailView(ResponseDataWrapperMixin,
@@ -86,7 +89,7 @@ class StudentDetailView(ResponseDataWrapperMixin,
     serializer_class = StudentSerializer
 
 
-class LoginView(ResponseDataWrapperMixin, APIView):
+class BaseLoginView(APIView):
     """
     <pre>
         {
@@ -104,15 +107,6 @@ class LoginView(ResponseDataWrapperMixin, APIView):
         if user:
             return user
         return None
-
-    def post(self, request):
-        user = self.credentials(request)
-        if not user:
-            return Response(
-                {"error": "wrong username or password"}, HTTP_401_UNAUTHORIZED)
-        login(request, user)
-        return Response(
-            {"user": UserSerializer(user, context={"request": request}).data})
 
     def get(self, request, format=None):
         content = {
@@ -128,25 +122,20 @@ class LoginView(ResponseDataWrapperMixin, APIView):
         return Response({})
 
 
-class LoginTokenView(ResponseDataWrapperMixinSuccess, APIView):
-    """
-    <pre>
-        {
-         "username": "admin",
-         "password": "admin"
-        }
-    </pre>
-    """
-    authentication_classes = ()
-    permission_classes = ()
+class LoginView(ResponseDataWrapperMixin, BaseLoginView):
 
-    def credentials(self, request):
-        username = request.data.get("username")
-        password = request.data.get("password")
-        user = authenticate(request, username=username, password=password)
-        if user:
-            return user
-        return None
+    def post(self, request):
+        user = self.credentials(request)
+        if not user:
+            return Response(
+                {"error": "wrong username or password"}, HTTP_401_UNAUTHORIZED)
+        login(request, user)
+        return Response(
+            {"user": UserSerializer(user, context={"request": request}).data})
+
+
+class LoginTokenView(ResponseDataWrapperMixinSuccess, BaseLoginView):
+    authentication_classes = ()
 
     def post(self, request):
         user = self.credentials(request)
@@ -159,16 +148,3 @@ class LoginTokenView(ResponseDataWrapperMixinSuccess, APIView):
                 "token": token.key,
                 "user": UserSerializer(user, context={"request": request}).data
             })
-
-    def get(self, request, format=None):
-        content = {
-            'user': str(request.user),
-            'auth': str(request.auth),
-        }
-        if not request.user.is_authenticated:
-            return Response(content, HTTP_401_UNAUTHORIZED)
-        return Response(content)
-
-    def delete(self, request):
-        logout(request)
-        return Response({})
