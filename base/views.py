@@ -1,10 +1,9 @@
-from django.shortcuts import get_object_or_404, get_list_or_404
+from django.shortcuts import get_object_or_404
 from base.models import Group, Student
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from django.core.urlresolvers import reverse
+from django.urls import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 from base.forms import GroupForm
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 
 # Create your views here.
 
@@ -18,25 +17,22 @@ class GroupList(ListView):
     context_object_name = "group_list"
 
     def get_context_data(self, **kwargs):
-        context = super(GroupList, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['title'] = "Group list"
         return context
 
 
-class GroupAdd(CreateView):
+class GroupAdd(LoginRequiredMixin, CreateView):
     """
     add group
     """
     model = Group
-    fields = ['name', ]
+    fields = ['name', 'department']
     template_name = "base/group_add.html"
-
-    @method_decorator(login_required(login_url='/login'))
-    def dispatch(self, request, *args, **kwargs):
-        return super(GroupAdd, self).dispatch(request, *args, **kwargs)
+    login_url = '/login/'
 
     def get_context_data(self, **kwargs):
-        context = super(GroupAdd, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['title'] = 'Group add'
         return context
 
@@ -48,14 +44,13 @@ class GroupEdit(UpdateView):
     """
     update group
     """
-    fields = ['name', 'headman']
     template_name = "base/group_edit.html"
     model = Group
     form_class = GroupForm
     pk_url_kwarg = 'group_id'
 
     def get_context_data(self, **kwargs):
-        context = super(GroupEdit, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['title'] = 'Group edit {}'.format(self.object, )
         return context
 
@@ -83,18 +78,15 @@ class StudentList(ListView):
     context_object_name = "student_list"
 
     def get_context_data(self, **kwargs):
-        context = super(StudentList, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['title'] = 'Stident list group {}'.format(
             self.kwargs['group_id'], )
         context['group_id'] = self.kwargs['group_id']
         return context
 
     def get_queryset(self):
-        return get_list_or_404(Student, group__pk=self.kwargs['group_id'])
-
-    #@method_decorator(login_required())
-    def dispatch(self, request, *args, **kwargs):
-        return super(StudentList, self).dispatch(request, *args, **kwargs)
+        group = get_object_or_404(Group, pk=self.kwargs['group_id'])
+        return group.student_set.all()
 
 
 class StudentAdd(CreateView):
@@ -102,12 +94,20 @@ class StudentAdd(CreateView):
     student add
     """
     model = Student
+    fields = ['fio', 'birthday', 'number_student_cart', 'group']
     template_name = "base/student_add.html"
 
+    def get_initial(self):
+        initial = super().get_initial()
+        group_id = self.request.GET.get('group_id')
+        if group_id:
+            initial['group'] = group_id
+        return initial
+
     def get_context_data(self, **kwargs):
-        context = super(StudentAdd, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['title'] = 'Student add'
-        context['group_id'] = self.request.GET['group_id']
+        context['group_id'] = self.request.GET.get('group_id')
         return context
 
     def get_success_url(self):
@@ -120,11 +120,12 @@ class StudentEdit(UpdateView):
     edit student
     """
     model = Student
+    fields = ['fio', 'birthday', 'number_student_cart', 'group']
     template_name = "base/student_edit.html"
     pk_url_kwarg = 'student_id'
 
     def get_context_data(self, **kwargs):
-        context = super(StudentEdit, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['title'] = 'Student edit {}'.format(
             self.object, )
         context['group_id'] = self.object.group.pk
@@ -144,7 +145,7 @@ class StudentDelete(DeleteView):
     pk_url_kwarg = 'student_id'
 
     def get_context_data(self, **kwargs):
-        context = super(StudentDelete, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['title'] = 'Delete student {}'.format(self.object)
         context['group_id'] = self.object.group.pk
         return context
@@ -152,4 +153,3 @@ class StudentDelete(DeleteView):
     def get_success_url(self):
         return reverse("student_list", kwargs={
             'group_id': self.object.group.pk})
-        #return reverse('group_list')

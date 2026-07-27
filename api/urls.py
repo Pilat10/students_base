@@ -1,18 +1,26 @@
-from django.conf.urls import patterns, url, include
+from django.urls import path
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+
 from api import views
 
-urlpatterns = patterns('api.views',
-    url(r'^department/$', views.DepartmentListView.as_view(),
-        name='department-list'),
-    url(r'^department/(?P<pk>[0-9]+)/$', views.DepartmentDetailView.as_view(),
-        name='department-detail'),
-    url(r'^group/$', views.GroupListView.as_view(), name='group-list'),
-    url(r'^group/(?P<pk>[0-9]+)/$', views.GroupDetailView.as_view(),
-        name='group-detail'),
-    url(r'^student/$', views.StudentListView.as_view(), name='student-list'),
-    url(r'^student/(?P<pk>[0-9]+)/$', views.StudentDetailView.as_view(),
-        name='studets-detail'),
-    url(r'^docs/', include('rest_framework_swagger.urls')),
-    url(r'^auth/', views.LoginView.as_view(), name="auth"),
-    url(r'^auth-token/', views.LoginTokenView.as_view(), name="auth"),
-)
+app_name = 'api'
+
+urlpatterns = [
+    path('department/', views.DepartmentListView.as_view(),
+         name='department-list'),
+    path('department/<int:pk>/', views.DepartmentDetailView.as_view(),
+         name='department-detail'),
+    path('group/', views.GroupListView.as_view(), name='group-list'),
+    path('group/<int:pk>/', views.GroupDetailView.as_view(),
+         name='group-detail'),
+    path('student/', views.StudentListView.as_view(), name='student-list'),
+    path('student/<int:pk>/', views.StudentDetailView.as_view(),
+         name='student-detail'),
+
+    path('auth/', views.LoginView.as_view(), name='auth'),
+    path('auth-token/', views.LoginTokenView.as_view(), name='auth-token'),
+
+    path('schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('docs/', SpectacularSwaggerView.as_view(url_name='api:schema'),
+         name='docs'),
+]
