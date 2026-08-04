@@ -9,6 +9,14 @@ from api.mixins import ResponseDataWrapperMixin, \
     ResponseDataWrapperMixinSuccess
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
+from rest_framework.exceptions import ValidationError
+
+
+def filter_students_by_name(queryset, query_params):
+    search_term = query_params.get("q", "").strip()
+    if not search_term:
+        return queryset
+    return queryset.filter(fio__icontains=search_term)
 
 
 class DepartmentListView(ResponseDataWrapperMixin, generics.ListCreateAPIView):
@@ -46,11 +54,24 @@ class GroupListView(ResponseDataWrapperMixin, generics.ListCreateAPIView):
     serializer_class = GroupSerializer
 
     def get_queryset(self):
+        queryset = super().get_queryset()
         department_id = self.request.query_params.get('department_id', None)
         if department_id is not None:
-            return super().get_queryset().filter(
+            queryset = queryset.filter(
                 department__pk=department_id)
-        return super().get_queryset()
+
+        has_headman = self.request.query_params.get('has_headman', None)
+        if has_headman is None:
+            return queryset
+
+        has_headman = has_headman.strip().lower()
+        if has_headman == 'true':
+            return queryset.exclude(headman=None)
+        if has_headman == 'false':
+            return queryset.filter(headman=None)
+        raise ValidationError({
+            'has_headman': 'Expected "true" or "false".',
+        })
 
 
 class GroupDetailView(ResponseDataWrapperMixin,
@@ -77,7 +98,7 @@ class StudentListView(ResponseDataWrapperMixin, generics.ListCreateAPIView):
         department_id = self.request.query_params.get('department_id', None)
         if department_id is not None:
             queryset = queryset.filter(group__department__pk=department_id)
-        return queryset
+        return filter_students_by_name(queryset, self.request.query_params)
 
 
 class StudentDetailView(ResponseDataWrapperMixin,

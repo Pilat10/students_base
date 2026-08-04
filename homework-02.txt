@@ -1,17 +1,49 @@
 Task A
 Technology: Python, Django, DRF
 Context: API for storing students data
-Instrument:
-Why?:
-Prompt:
+Instrument: Claude Code VSCode extension
+Why?: In any case copilot use external models so I prefer to chose models by myself. Also I like to work with Claude Code and use it daily
+Prompt: @api/views.py#72-77 add possibility to filter students by 'department_id' to see a list of students in specific department
 Result:
+before:
+class StudentListView(ResponseDataWrapperMixin, generics.ListCreateAPIView):
+    """
+
+    """
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+    def get_queryset(self):
+        group_id = self.request.query_params.get('group_id', None)
+        if group_id is not None:
+            return super().get_queryset().filter(
+                group__pk=group_id)
+        return super().get_queryset()
+
+after:
+class StudentListView(ResponseDataWrapperMixin, generics.ListCreateAPIView):
+    """
+
+    """
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        group_id = self.request.query_params.get('group_id', None)
+        if group_id is not None:
+            queryset = queryset.filter(group__pk=group_id)
+        department_id = self.request.query_params.get('department_id', None)
+        if department_id is not None:
+            queryset = queryset.filter(group__department__pk=department_id)
+        return queryset
 
 Task B
 Technology: Python, Django, DRF
 Context: API for storing students data
-Instrument:
-Why?:
-Prompt:
+Instrument: Claude Code VSCode extension
+Why?: In any case copilot use external models so I prefer to chose models by myself. Also I like to work with Claude Code and use it daily
+Prompt: @api/ I'm Onbording new member. Explain: what it does, what dependancies, what main 2 issues have?
 Result:
 
 
