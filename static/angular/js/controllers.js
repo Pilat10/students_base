@@ -375,6 +375,7 @@ angularControllers.controller('StudentList', function($scope, $http, $routeParam
     } else {
         $scope.setGroupId(false);
     }
+    $scope.exportUrl = '/api/v1/student/export/'+dep_url_get;
 
     $http.get('/api/v1/student/'+dep_url_get)
         .success(function(data) {

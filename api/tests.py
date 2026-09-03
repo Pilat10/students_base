@@ -1,3 +1,5 @@
+import csv
+import io
 from datetime import date, timedelta
 
 from rest_framework.test import APITestCase
@@ -485,3 +487,79 @@ class GroupTestCase(APITestCase):
         }, format='json')
         self.assertEqual(put.status_code, HTTP_200_OK)
         self.assertIsNone(Group.objects.get(pk=group.pk).headman)
+
+
+class StudentExportTestCase(APITestCase):
+    """
+    test api student CSV export, including filters, empty results
+    and the authentication requirement.
+    """
+    fixtures = ['test_data', 'auth']
+
+    def setUp(self):
+        self.client.login(username='admin', password='admin')
+        self.export_url = reverse("api:student-export")
+
+    def _read_csv_rows(self, response):
+        content = response.getvalue().decode('utf-8')
+        return list(csv.reader(io.StringIO(content)))
+
+    def test_export_requires_authentication(self):
+        """
+        anonymous requests must be rejected, matching the project-wide
+        default IsAuthenticated permission other API endpoints get. DRF
+        returns 403 (not 401) here because SessionAuthentication, the
+        first authenticator in DEFAULT_AUTHENTICATION_CLASSES, doesn't
+        set a WWW-Authenticate header.
+        """
+        self.client.logout()
+        get = self.client.get(self.export_url)
+        self.assertEqual(get.status_code, 403)
+
+    def test_export_all_students(self):
+        """
+        with no filters, export contains every student plus the header row.
+        """
+        get = self.client.get(self.export_url)
+        self.assertEqual(get.status_code, HTTP_200_OK)
+        self.assertEqual(get['Content-Type'], 'text/csv')
+        rows = self._read_csv_rows(get)
+        self.assertEqual(
+            rows[0],
+            ['fio', 'birthday', 'number_student_cart', 'group', 'department'])
+        self.assertEqual(len(rows) - 1, Student.objects.count())
+
+    def test_export_filters_by_group_id(self):
+        group = Group.objects.get(pk=1)
+        expected_count = Student.objects.filter(group=group).count()
+        get = self.client.get(self.export_url, {"group_id": group.pk})
+        rows = self._read_csv_rows(get)
+        self.assertEqual(len(rows) - 1, expected_count)
+        self.assertTrue(all(row[3] == group.name for row in rows[1:]))
+
+    def test_export_filters_by_department_id(self):
+        department = Department.objects.get(pk=1)
+        expected_count = Student.objects.filter(
+            group__department=department).count()
+        get = self.client.get(
+            self.export_url, {"department_id": department.pk})
+        rows = self._read_csv_rows(get)
+        self.assertEqual(len(rows) - 1, expected_count)
+        self.assertTrue(
+            all(row[4] == department.name_department for row in rows[1:]))
+
+    def test_export_filters_by_name_search(self):
+        student = Student.objects.get(fio='student 21')
+        get = self.client.get(self.export_url, {"q": "student 2"})
+        rows = self._read_csv_rows(get)
+        self.assertTrue(all('student 2' in row[0] for row in rows[1:]))
+        self.assertIn(student.fio, [row[0] for row in rows[1:]])
+
+    def test_export_empty_result_returns_header_only(self):
+        get = self.client.get(self.export_url, {"q": "no such student"})
+        self.assertEqual(get.status_code, HTTP_200_OK)
+        rows = self._read_csv_rows(get)
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(
+            rows[0],
+            ['fio', 'birthday', 'number_student_cart', 'group', 'department'])

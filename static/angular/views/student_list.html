@@ -31,6 +31,7 @@
         </table>
     </div>
     <p class="alert alert-danger text-center" ng-show="notLoggedMsg">You are not logged in!!! Please log in.</p>
+    <a ng-href="{{ exportUrl }}" class="btn btn-default btn-block btn-lg">Export to CSV</a>
     <button type="button" class="btn btn-success btn-block btn-lg" ng-click="addButton()">Add student</button>
     <a href="{{ backUrl }}" class="btn btn-primary btn-block btn-lg" ng-show="back_button">Back</a>
 </div>
