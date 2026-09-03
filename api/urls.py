@@ -14,6 +14,8 @@ urlpatterns = [
     path('group/<int:pk>/', views.GroupDetailView.as_view(),
          name='group-detail'),
     path('student/', views.StudentListView.as_view(), name='student-list'),
+    path('student/export/', views.StudentExportView.as_view(),
+         name='student-export'),
     path('student/<int:pk>/', views.StudentDetailView.as_view(),
          name='student-detail'),
 

@@ -1,5 +1,8 @@
+import csv
+
 from api.serializers import StudentSerializer, GroupSerializer, \
     UserSerializer, DepartmentSerializer
+from django.http import HttpResponse
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.status import HTTP_401_UNAUTHORIZED
@@ -17,6 +20,21 @@ def filter_students_by_name(queryset, query_params):
     if not search_term:
         return queryset
     return queryset.filter(fio__icontains=search_term)
+
+
+def filter_students(queryset, query_params):
+    """
+    Shared by StudentListView and StudentExportView so the CSV export
+    always matches whatever group_id/department_id/q filters are applied
+    to the JSON list.
+    """
+    group_id = query_params.get('group_id', None)
+    if group_id is not None:
+        queryset = queryset.filter(group__pk=group_id)
+    department_id = query_params.get('department_id', None)
+    if department_id is not None:
+        queryset = queryset.filter(group__department__pk=department_id)
+    return filter_students_by_name(queryset, query_params)
 
 
 class DepartmentListView(ResponseDataWrapperMixin, generics.ListCreateAPIView):
@@ -92,13 +110,7 @@ class StudentListView(ResponseDataWrapperMixin, generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        group_id = self.request.query_params.get('group_id', None)
-        if group_id is not None:
-            queryset = queryset.filter(group__pk=group_id)
-        department_id = self.request.query_params.get('department_id', None)
-        if department_id is not None:
-            queryset = queryset.filter(group__department__pk=department_id)
-        return filter_students_by_name(queryset, self.request.query_params)
+        return filter_students(queryset, self.request.query_params)
 
 
 class StudentDetailView(ResponseDataWrapperMixin,
@@ -108,6 +120,37 @@ class StudentDetailView(ResponseDataWrapperMixin,
     """
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+
+
+class StudentExportView(APIView):
+    """
+    Exports students as CSV, honoring the same group_id/department_id/q
+    filters as StudentListView. Not wrapped in ResponseDataWrapperMixin:
+    the response body is CSV, not JSON, so the {status, data} envelope
+    doesn't apply.
+    """
+
+    def get(self, request):
+        queryset = filter_students(
+            Student.objects.select_related('group__department'),
+            request.query_params)
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = \
+            'attachment; filename="students.csv"'
+
+        writer = csv.writer(response)
+        writer.writerow(
+            ['fio', 'birthday', 'number_student_cart', 'group', 'department'])
+        for student in queryset:
+            writer.writerow([
+                student.fio,
+                student.birthday,
+                student.number_student_cart,
+                student.group.name,
+                student.group.department.name_department,
+            ])
+        return response
 
 
 class BaseLoginView(APIView):
