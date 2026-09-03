@@ -85,6 +85,7 @@ class GroupSerializer(serializers.ModelSerializer):
     """
     count_student = serializers.SerializerMethodField()
     headman_name = serializers.SerializerMethodField()
+    has_headman = serializers.SerializerMethodField()
     headman = EmptyStringAsNullPKField(
         queryset=Student.objects.all(), allow_null=True, required=False)
 
@@ -94,6 +95,9 @@ class GroupSerializer(serializers.ModelSerializer):
     def get_headman_name(self, obj):
         return str(obj.headman) if obj.headman_id else None
 
+    def get_has_headman(self, obj):
+        return obj.headman_id is not None
+
     class Meta:
         model = Group
         fields = (
@@ -102,7 +106,8 @@ class GroupSerializer(serializers.ModelSerializer):
             "department",
             "count_student",
             "headman",
-            "headman_name"
+            "headman_name",
+            "has_headman",
         )
 
 

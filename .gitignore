@@ -3,3 +3,4 @@
 *.log
 db.sqlite3
 students_base/local_settings.py
+internal_docs/*

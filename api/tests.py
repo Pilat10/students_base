@@ -281,7 +281,8 @@ class GroupTestCase(APITestCase):
             "department",
             "count_student",
             "headman",
-            "headman_name"
+            "headman_name",
+            "has_headman",
         }
 
     def test_is_fixtures_load(self):
@@ -305,6 +306,37 @@ class GroupTestCase(APITestCase):
         self.assertEqual(get.status_code, HTTP_200_OK)
         self.assertEqual(get.data.get("status"), SUCCESS_STATUS)
         self.assertEqual(len(get.data.get("data")), count_group)
+
+    def test_get_group_list_filters_groups_with_headman(self):
+        expected_count = Group.objects.exclude(headman=None).count()
+        get = self.client.get(
+            self.group_list_url, {"has_headman": "true"})
+
+        self.assertEqual(get.status_code, HTTP_200_OK)
+        self.assertEqual(get.data.get("status"), SUCCESS_STATUS)
+        self.assertEqual(len(get.data.get("data")), expected_count)
+        self.assertTrue(
+            all(group["has_headman"] for group in get.data.get("data")))
+
+    def test_get_group_list_filters_groups_without_headman(self):
+        expected_count = Group.objects.filter(headman=None).count()
+        get = self.client.get(
+            self.group_list_url, {"has_headman": "false"})
+
+        self.assertEqual(get.status_code, HTTP_200_OK)
+        self.assertEqual(get.data.get("status"), SUCCESS_STATUS)
+        self.assertEqual(len(get.data.get("data")), expected_count)
+        self.assertTrue(
+            all(not group["has_headman"] for group in get.data.get("data")))
+
+    def test_get_group_list_rejects_invalid_has_headman(self):
+        get = self.client.get(
+            self.group_list_url, {"has_headman": "unknown"})
+
+        self.assertEqual(get.status_code, HTTP_400_BAD_REQUEST)
+        self.assertEqual(get.data.get("status"), FAIL_STATUS)
+        self.assertEqual(
+            set(get.data.get("data").keys()), {"has_headman", })
 
     def test_post_group_success(self):
         """
